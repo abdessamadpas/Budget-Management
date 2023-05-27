@@ -4,7 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
-const middlewares = require('../middlewares/errors');
+const middlewares = require('./middlewares/errors');
 require('dotenv').config()
 
 
