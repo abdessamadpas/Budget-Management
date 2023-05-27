@@ -1,12 +1,21 @@
+const { Schema } = require('mongoose');
 const mongoose = require('./connection/index');
 
 //reimbursement schema:
 const ReimbursementSchema = new mongoose.Schema({
-    id: Number,
-    expenses:Float, //foreignkey expense table
-    receipent: Float,
-    amount:Number
-}); 
+    expenses:{
+        type : Schema.Types.ObjectId,
+        ref : 'Expense'
+    }, 
+    receipt: {
+        type : Schema.Types.ObjectId,
+        ref : 'User'
+    },
+    amount: {
+        type: Number,
+        required: true,
+    },
+}, {timestamps: true}); 
 
 const Reimbursement = mongoose.model('Reimbursement',ReimbursementSchema);
 

@@ -2,11 +2,22 @@ const mongoose = require('./connection/index');
 
 // user schemas:
 
-const UserSchemas = new mongoose.Schema({
-    id: Number ,
-    name: String 
-});
+const UserSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    email:{
+        type: String,
+    },
+    password:{
+        type: String,
+        required: true,
+    },
+    phone:{
+        type: String,
+    },
+}, {timestamps: true});
 
-//create user model:
 const User = mongoose.model('User',UserSchema);
 module.exports=User;
