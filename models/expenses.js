@@ -2,15 +2,21 @@ const mongoose = require('./connection/index');
 
 //expenses schema:
 const ExpenseSchema = new mongoose.Schema({
-   id: Number,
-   description : String,
-   amount: Number,
-   paiby:String,
-   beneficiaires:String,
-   type: String 
-});
+   description : {
+      type: String,
+   },
+   amount: {
+      type: Number,
+      required: true,
+   },
+   paiby:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+   },
+   beneficiaries: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+   },
+}, {timestamps: true});
 
-//expenses model:
-const Expenses = mongoose.model('Expenses', ExpenseSchema);
-
-module.exports=Expenses;
+module.exports=mongoose.model('Expense', ExpenseSchema);

@@ -3,8 +3,10 @@ const mongoose = require ('./conncetion/index');
 //expensestype schema:
 
 const ExpenseTypeSchema = new mongoose.Schema({
-    id: Number,
-    name: String
+    name: {
+        type: String,
+        required: true,
+    }
 }); 
 
 //model :
