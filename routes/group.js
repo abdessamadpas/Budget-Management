@@ -2,21 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Group = require ('../models/group');
 
-//create new group:
+//  create new group:
 router.post('/group', async(req, res)=>{
     try{
-        const {members, expenses, reimbursement}= req.body;
-        //passer en tant qu'argument por initialiser la new instance 
-        const newGroup = new Group({
-            members,
-            expenses,
-            reimbursement,
-        });
-        //save in the db
+        const group= req.body;
+        const newGroup = new Group(group);
         await newGroup.save();
-        //succes
         res.status(201).json({message: 'Group created succefully'});
-    //error
     }catch (err) {
         console.error(err);
         res.status(500).json({message: 'Failed to create group'});
@@ -24,17 +16,14 @@ router.post('/group', async(req, res)=>{
     
 });
 
-//get group by id:
+//  get group by id:
 router.get('/group/:groupId', async(req,res) => {
     try{
-        //req.params.groupId extrait la valeur de userId
         const group = await Group.findById(req.params.groupId);
-        //group not found
         if(!group){
             return rs.status(404).json({message:'group not found'});
         }
-        res.json(group);  //trouvé donc il va être renvoyé en tant que format json avec 200 ok      
-    //erreur
+        res.json(group);  
     }catch(err){
         console.error(err);
         res.status(500).json({message: 'Fails to get group'});
@@ -55,11 +44,12 @@ router.get('/group', async (req, res) => {
 //update group:
 router.put ('/group/:groupId', async (req,res)=>{
     try{
-        const {members, expenses, reimbursement}= req.body;
-        const updateGroup = await Group.findByIdAndUpdate(
+        const UpdatedGroup= req.body;
+        const group = new Group(UpdatedGroup);
+        const updateGroup = await group.findByIdAndUpdate(
             req.params.groupId, 
-            {members,expenses, reimbursement},
-            {new: true}//document mise à jour (db)
+            group,
+            {new: true}
         );
         if(!updateGroup){
            return rs.status(404).json({message:'group not found'});
@@ -75,13 +65,10 @@ router.put ('/group/:groupId', async (req,res)=>{
 //delete group:
 router.delete('/group/:groupId', async (req,res) => {
     try{
-        // const deleteGroup= await Group.findByIdAndDelete(req.params.groupId);
-        // if(!deleteGroup){
-        //     return rs.status(404).json({message:'group not found'});
+       
         group.findByIdAndRemove({ _id: req.params.id }, (err,) => {
             if (err) next(err)
-            res.status(200)
-            res.json({
+            res.status(200).json({
                 message: "🪓 Group Deleted 🧨"
             });
         });
@@ -91,3 +78,7 @@ router.delete('/group/:groupId', async (req,res) => {
         res.status(500).json({message: 'Fails to delete group'});
     }
 })
+
+
+
+// delete user from group
