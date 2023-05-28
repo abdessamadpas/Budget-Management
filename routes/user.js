@@ -1,6 +1,6 @@
-// get user  by id
+// get user  by id done
 
 // get  users
-// create user
-// update user
-// delete user
+// create user done
+// update user done
+// delete user done
