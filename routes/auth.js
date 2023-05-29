@@ -108,8 +108,6 @@ const getAllUsers = router.get('/Users', verifyToken, (req, res, next) => {
 })
 //
 const getUser = router.get('/Users/:id', verifyToken, (req, res, next) => {
-
-
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
 
@@ -128,7 +126,7 @@ const getUser = router.get('/Users/:id', verifyToken, (req, res, next) => {
                     })
                 }else{
                     next({
-                        message : "User not found bro are you jocking 🤷‍♂️"
+                        message : "User not found bro are you joking 🤷‍♂️"
                     })
                 }
         }

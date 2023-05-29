@@ -3,7 +3,7 @@ const router = express.Router();
 const ExpenseType = require('../models/expensetype');
 
 //create a new expense type:
-router.post('/expensetype', async(req,res)=>{
+const createExpense = router.post('/expensetype', async(req,res)=>{
     try{
         const expensetype = req.body;
         const newexptype = new ExpenseType(expensetype);
@@ -16,7 +16,7 @@ router.post('/expensetype', async(req,res)=>{
 });
 
 //get all expense type:
-router.get('/expensetype', async(req,res)=>{
+const getAllExpenseType = router.get('/expensetype', async(req,res)=>{
     try{
         const expenetypes = await ExpenseType.find({});
         res.json(expenetypes);
@@ -27,4 +27,7 @@ router.get('/expensetype', async(req,res)=>{
 });
 
 //update expense type
-module.exports =router;
+module.exports ={
+    createExpense,
+    getAllExpenseType
+};

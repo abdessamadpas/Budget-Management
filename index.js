@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const auth = require('./routes/auth.js');
+const expensesType = require('./routes/expensetype.js');
 const middlewares = require('./middlewares/errors');
 require('dotenv').config()
 
@@ -24,11 +25,18 @@ app.use(morgan('tiny'));
 // app.use('/expenses', require('./routes/expenses.js'));
 // app.use('/auth', require('./routes/auth.js'));
 //  app.use('/group', require('./routes/group.js'));
- app.use('/auth', auth.singup);
+app.use('/auth', auth.singup);
+app.use('/auth', auth.signIn);
+app.use('/auth', auth.UpdateUser);
+app.use('/expensetype', expensesType.createExpense);
+app.use('/expensetype', expensesType.getAllExpenseType);
+// app.use('/auth', auth.DeleteUser);
+// app.use('/auth', auth.getAllUsers);
+// app.use('/auth', auth.getUserById);
 
- app.use('/auth', auth.signIn);
 // app.use('/reimbursement', require('./routes/reimbursement.js'));
 // app.use('/expensetype', require('./routes/expensetype.js'));
+
 
 
 
