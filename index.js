@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 const middlewares = require('./middlewares/errors');
-//const {connectionDB}= require('./connection/conn.js');
 require('dotenv').config()
 
 
@@ -24,7 +23,7 @@ app.use(morgan('tiny'));
 // app.use('/user', require('./routes/user.js'));
 // app.use('/expenses', require('./routes/expenses.js'));
 // app.use('/auth', require('./routes/auth.js'));
-app.use('/group', require('./routes/group.js'));
+ app.use('/group', require('./routes/group.js'));
 // app.use('/reimbursement', require('./routes/reimbursement.js'));
 // app.use('/expensetype', require('./routes/expensetype.js'));
 

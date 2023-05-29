@@ -79,6 +79,4 @@ router.delete('/group/:groupId', async (req,res) => {
     }
 })
 
-
-
-// delete user from group
+module.exports =router;

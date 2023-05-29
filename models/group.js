@@ -1,4 +1,4 @@
-const mongoose =  require ('./connection/index');
+const mongoose =  require ('mongoose');
 
 //group schemas:
 const GroupeSchemas = new mongoose.Schema({
