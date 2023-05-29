@@ -72,3 +72,4 @@ router.put ('/updateUser/:userId', async (req,res)=>{
     }
 }
 );
+exports.router = router;

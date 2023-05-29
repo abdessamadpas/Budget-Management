@@ -1,27 +1,29 @@
 const mongoose =  require ('mongoose');
 
-//group schemas:
+
 const GroupeSchemas = new mongoose.Schema({
     name : {
         type : String,
         required : true,
         unique : true
     },
-    members:{
+    balance : {
+        type : Number,
+        default : 0
+    },
+    members : [{
         type : mongoose.Schema.Types.ObjectId,
-        ref : 'User'
-    }
-    ,
-    expenses: {
+        ref : 'User',
+    }],
+    expenses : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Expense'
-    },
-    reimbursement: {
+    }],
+    reimbursement : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Reimbursement'
-    }
+    }],
 }, {timestamps: true});
 
-//create group model:
 
 module.exports=mongoose.model('Group',GroupeSchemas);

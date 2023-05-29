@@ -10,6 +10,4 @@ const ExpenseTypeSchema = new mongoose.Schema({
 }); 
 
 //model :
-const ExpenseType = mongoose.model('ExpenseType', ExpenseTypeSchema);
-
-module.exports=ExpenseType;
+module.exports=mongoose.model('ExpenseType', ExpenseTypeSchema);

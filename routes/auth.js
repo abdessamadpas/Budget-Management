@@ -11,7 +11,7 @@ const singup = router.post('/signup', async (req, res) => {
     const user = new User(req.body);
     // const salt = await bcrypt.genSalt(10);
     
-    user.create({ ...req.body, password: hashedPassword })
+    User.create({ ...req.body, password: hashedPassword })
         .then((result) => {
             jwt.sign({ User }, 'secretkey', { expiresIn: '127d' }, (err, token) => {
                 if (err) {
@@ -51,18 +51,18 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
 
 const signIn = router.post('/signin', async (req, res, next) => {
     console.log(req.body);
-    const User = await UserModel.findOne({ email: req.body.email });
-    console.log(User);
-    if (User) {
-        const isMatch = await User.comparePassword(req.body.password, User.password)
+    const user = await User.findOne({ email: req.body.email });
+    console.log(user);
+    if (user) {
+        const isMatch = await bcrypt.compare(req.body.password, user.passwordHash);
             if(isMatch) {
-                jwt.sign({ User }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
+                jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
                     if (err) {
                         res.sendStatus(403);
                         console.log(err);
                     } else {
                         res.json({
-                            User,
+                            user,
                             token
                         });
                     }
