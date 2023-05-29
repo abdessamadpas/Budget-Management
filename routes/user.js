@@ -19,8 +19,7 @@ router.post('/addUser', async(req, res)=>{
     }catch (err) {
         console.error(err);
         res.status(500).json({message: 'Failed to create user'});
-    }
-    
+    }    
 });
 
 // get user  by id done
@@ -47,8 +46,7 @@ router.get('/getUsers', async (req, res) => {
         console.error(err);
         res.status(500).json({message: 'Failed to get all users'});
     }
-}
-)
+});
 //update user done
 router.put ('/updateUser/:userId', async (req,res)=>{
     try{

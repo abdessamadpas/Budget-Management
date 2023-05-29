@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose');
-const mongoose = require('./connection/index');
+
 
 const ReimbursementSchema = new mongoose.Schema({
     expenses:[{

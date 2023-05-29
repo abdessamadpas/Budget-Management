@@ -1,4 +1,4 @@
-const mongoose = require('./connection/index');
+const mongoose =  require ('mongoose');
 
 
 // Path: models\expenses.js

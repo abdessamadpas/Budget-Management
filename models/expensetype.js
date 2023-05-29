@@ -1,4 +1,4 @@
-const mongoose = require ('./conncetion/index');
+const mongoose =  require ('mongoose');
 
 //expensestype schema:
 
