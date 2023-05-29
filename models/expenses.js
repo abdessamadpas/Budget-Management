@@ -1,4 +1,4 @@
-const mongoose = require('./connection/index');
+const mongoose =  require ('mongoose');
 
 //expenses schema:
 const ExpenseSchema = new mongoose.Schema({
@@ -19,4 +19,6 @@ const ExpenseSchema = new mongoose.Schema({
    },
 }, {timestamps: true});
 
-module.exports=mongoose.model('Expense', ExpenseSchema);
+const Expense = mongoose.model('Expense', ExpenseSchema);
+
+module.exports=Expense;
