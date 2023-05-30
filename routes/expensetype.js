@@ -16,7 +16,7 @@ const createExpense = router.post('/expensetype', async(req,res)=>{
 });
 
 //get all expense type:
-const getAllExpenseType = router.get('/expensetype', async(req,res)=>{
+const getAllExpenseType = router.get('/', async(req,res)=>{
     try{
         const expenetypes = await ExpenseType.find({});
         res.json(expenetypes);

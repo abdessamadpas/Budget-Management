@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 //  create new group:
- const createGroup = router.post('/',verifyToken  ,async(req, res)=>{
+ const createGroup = router.post('/add',verifyToken  ,async(req, res)=>{
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -82,7 +82,7 @@ const addMemberToGroup = router.put('/:groupId/members/:userId',verifyToken ,asy
             await Group.updateOne({_id: groupId}, currentgroup, (err, result) => {
                 if (err) {
                     res.status(500).json({
-                        message: "Failed to add member to group 😢"
+                        message: "Failed to add a member to group 😢"
                         })
                         } else {
                             res.status(200).json({

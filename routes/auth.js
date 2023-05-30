@@ -30,14 +30,14 @@ const singup = router.post('/signup', async (req, res) => {
 })
 
 
-const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next) => {
+const UpdateUser = router.put('/update/:id', verifyToken, async (req, res, next) => {
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403).json({
                 message: "Authentication failed try to login "
             })
         } else {
-            UserModel.updateOne({ _id: req.params.id }, req.body, { new: true }, (err, newRoomInfo) => {
+            User.updateOne({ _id: req.params.id }, req.body, { new: true }, (err, newRoomInfo) => {
                 if (err) next(err)
                 res.status(200)
                 res.json({
@@ -48,39 +48,7 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
     })
 });
 
-// const signIn = router.post('/signin', async (req, res, next) => {
-//     try {
-//       console.log(req.body);
-//       const user = await User.findOne({ email: req.body.email });
-//       if (user) {
-//         const isMatch = await bcrypt.compare(req.body.password, user.passwordHash);
-//         if (isMatch) {
-//           jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
-//             if (err) {
-//               console.error(err);
-//               res.sendStatus(500);
-//             } else {
-//               res.json({
-//                 user,
-//                 token
-//               });
-//             }
-//           });
-//         } else {
-//             next({
-//                  message : "Password Invalid Bro 👀👀👀"
-//              });
-//         }
-//       } else {
-//         next({
-//             message: "Username Invalid try again 🐱‍👓 🐱‍🏍"
-//         });
-//       }
-//     } catch (error) {
-//       console.error(error);
-//       next(error);
-//     }
-//   });
+
  
 const signIn = router.post('/signin', async (req, res, next) => {
     console.log(req.body);

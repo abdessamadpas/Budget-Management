@@ -1,13 +1,13 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
 
 
 const ReimbursementSchema = new mongoose.Schema({
-    expenses:[{
-        type : Schema.Types.ObjectId,
+    expenses : [{
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'Expense'
     }], 
     receipt: [{
-        type : Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
     }],
     amount: {
