@@ -52,11 +52,19 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
 const signIn = router.post('/signin', async (req, res, next) => {
     console.log(req.body);
     const user = await User.findOne({ name: req.body.name });
-    console.log(user);
+    console.log("user :", user);
+    console.log("user.password :", user.password);
+
+    console.log("req.body.password :", req.body.password);
+
     if (user) {
-        const isMatch = await bcrypt.compare(req.body.password, user.passwordHash);
+         const isMatch = await bcrypt.compare(req.body.password, user.password);
+       
+    
+
+     
             if(isMatch) {
-                jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
+                jwt.sign({ user }, 'secretkey', { expiresIn: '1999d' }, (err, token) => {
                     if (err) {
                         res.sendStatus(403);
                         console.log(err);
