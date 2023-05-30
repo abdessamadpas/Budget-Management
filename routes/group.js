@@ -123,29 +123,38 @@ const addExpenseToGroup = router.put('/:groupId/expenses/:expenseId',verifyToken
 
             
 //update group:
-router.put ('/:groupId', async (req,res)=>{
-    try{
+const updateGroup = router.put ('/:groupId', verifyToken,async (req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {  
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
         const UpdatedGroup= req.body;
-        const group = new Group(UpdatedGroup);
-        const updateGroup = await group.findByIdAndUpdate(
-            req.params.groupId, 
-            group,
-            {new: true}
-        );
-        if(!updateGroup){
-           return rs.status(404).json({message:'group not found'});
-        }
-        res.json(updateGroup);
-    } catch(err){
-        console.error(err);
-        res.status(500).json({message: 'Fails to update group'});
-    }
-});
+            const group = new Group(UpdatedGroup);
+            const updateGroup = await group.findByIdAndUpdate(
+                req.params.groupId, 
+                group,
+                {new: true}
+            );
+            if(!updateGroup){
+            return rs.status(404).json({message:'group not found'});
+            }
+            res.json(updateGroup);
+   
+}})});
 
 
 //delete group:
-router.delete('/:groupId', async (req,res) => {
-    try{
+const deleteGroup = router.delete('/:groupId', verifyToken,async (req,res) => {
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {  
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
         Group.findByIdAndRemove({ _id: req.params.id }, (err,) => {
             if (err) next(err)
             res.status(200).json({
@@ -153,37 +162,33 @@ router.delete('/:groupId', async (req,res) => {
             });
         });
         res.json({message:'Group deleted successfully'});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({message: 'Fails to delete group'});
-    }
-});
+  
+}})});
 
 //delete user from group:
-router.delete('/:groupId/members/:userId', async(req,res)=>{
-    try{
+const deleteMemberGroup = router.delete('/:groupId/members/:userId',verifyToken, async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {  
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
         const groupId = req.params.groupId;
         const userId = req.params.userId;
-        //touver le groupe selon id:
         const group = await Group.findById(groupId);
-        //touver l'utilisateur selon id:
         const user = await User.findById(userId);
-        //verification d'exsistence user ou group:
         if(!group || !user){
             return res.status(404).json({error: 'Group or User not found'});
         }
-        //suppression de user from group: 'splice(startIndex, nmb of element to delete, replaceitem1)'
         const index = group.members.indexOf(userId);
-        if(index !== -1){ //"-1" means element not found
+        if(index !== -1){ 
             group.members.splice(index,1);
             await group.save();
         }
         return res.json({ message: 'user removed succesfully from the group'});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({message: 'Fails to delete user from group'});
     }
-});
+})});
 
 function verifyToken(req, res, next) {
     // Get auth header value
@@ -211,8 +216,11 @@ function verifyToken(req, res, next) {
 }
 
 module.exports ={
-  createGroup,
+    createGroup,
     getAllGroups,
     addMemberToGroup,
-    addExpenseToGroup
+    addExpenseToGroup,
+    deleteMemberGroup,
+    deleteGroup,
+    updateGroup
 };

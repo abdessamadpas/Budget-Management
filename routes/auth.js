@@ -48,7 +48,6 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
     })
 });
 
-
 // const signIn = router.post('/signin', async (req, res, next) => {
 //     try {
 //       console.log(req.body);
@@ -84,37 +83,40 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
 //   });
  
 const signIn = router.post('/signin', async (req, res, next) => {
-    try {
-      console.log(req.body);
-      const user = await User.findOne({ email: req.body.email });
-  
-      if (user) {
-        const isMatch = await bcrypt.compare(req.body.password, user.password);
-  
-        if (isMatch) {
-          // Password matches, generate a token
-          jwt.sign({ user }, 'secretkey', { expiresIn: '9999999h' }, (err, token) => {
-            if (err) {
-              console.error(err);
-              res.sendStatus(500);
+    console.log(req.body);
+    const user = await User.findOne({ name: req.body.name });
+    console.log("user :", user);
+    console.log("user.password :", user.password);
+
+    console.log("req.body.password :", req.body.password);
+
+    if (user) {
+         const isMatch = await bcrypt.compare(req.body.password, user.password);
+       
+    
+
+     
+            if(isMatch) {
+                jwt.sign({ user }, 'secretkey', { expiresIn: '1999d' }, (err, token) => {
+                    if (err) {
+                        res.sendStatus(403);
+                        console.log(err);
+                    } else {
+                        res.json({
+                            user,
+                            token
+                        });
+                    }
+                });
             } else {
-              res.json({
-                user,
-                token
-              });
+                next({
+                    message : "Password Invalid Bro 👀👀👀"
+                })
             }
-          });
-        } else {
-          // Password does not match
-          throw new Error('Invalid password');
-        }
-      } else {
-        // User not found
-        throw new Error('Invalid username');
-      }
-    } catch (error) {
-      console.error(error);
-      next(error);
+    } else {
+        next({
+            message: "Username Invalid try again 🐱‍👓 🐱‍🏍"
+        })
     }
 });
 
