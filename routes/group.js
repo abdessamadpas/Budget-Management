@@ -184,6 +184,7 @@ router.delete('/:groupId/members/:userId', async(req,res)=>{
         res.status(500).json({message: 'Fails to delete user from group'});
     }
 });
+
 function verifyToken(req, res, next) {
     // Get auth header value
     const bearerHeader = req.headers['authorization'];
