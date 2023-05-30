@@ -46,39 +46,44 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
             })
         }
     })
-})
+});
 
 
 const signIn = router.post('/signin', async (req, res, next) => {
-    console.log(req.body);
-    const user = await User.findOne({ email: req.body.email });
-    console.log(user);
-    if (user) {
+    try {
+      console.log(req.body);
+      const user = await User.findOne({ email: req.body.email });
+      if (user) {
         const isMatch = await bcrypt.compare(req.body.password, user.passwordHash);
-            if(isMatch) {
-                jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
-                    if (err) {
-                        res.sendStatus(403);
-                        console.log(err);
-                    } else {
-                        res.json({
-                            user,
-                            token
-                        });
-                    }
-                });
+        if (isMatch) {
+          jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
+            if (err) {
+              console.error(err);
+              res.sendStatus(500);
             } else {
-                next({
-                    message : "Password Invalid Bro 👀👀👀"
-                })
+              res.json({
+                user,
+                token
+              });
             }
-    } else {
+          });
+        } else {
+            next({
+                 message : "Password Invalid Bro 👀👀👀"
+             });
+        }
+      } else {
         next({
             message: "Username Invalid try again 🐱‍👓 🐱‍🏍"
-        })
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      next(error);
     }
-})
-
+  });
+  
+  
 
 // verify token
 const getAllUsers = router.get('/Users', verifyToken, (req, res, next) => {

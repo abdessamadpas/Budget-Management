@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const auth = require('./routes/auth.js');
 const expensesType = require('./routes/expensetype.js');
 const middlewares = require('./middlewares/errors');
-require('dotenv').config()
+require('dotenv').config();
 
 
 const app = express();
@@ -25,8 +25,8 @@ app.use(morgan('tiny'));
 // app.use('/expenses', require('./routes/expenses.js'));
 // app.use('/auth', require('./routes/auth.js'));
 //  app.use('/group', require('./routes/group.js'));
-app.use('/auth', auth.singup);
-app.use('/auth', auth.signIn);
+app.use('/auth', auth.singup);//?done
+app.use('/auth', auth.signIn);//?done
 app.use('/auth', auth.UpdateUser);
 app.use('/expensetype', expensesType.createExpense);
 app.use('/expensetype', expensesType.getAllExpenseType);
