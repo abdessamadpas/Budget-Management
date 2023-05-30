@@ -2,19 +2,33 @@ const express = require('express');
 const router = express.Router();
 const Group = require ('../models/group');
 const User = require ('../models/user');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 //  create new group:
-router.post('/', async(req, res)=>{
-    try{
-        const group= req.body;
-        const newGroup = new Group(group);
-        await newGroup.save();
-        res.status(201).json({message: 'Group created succefully'});
-    }catch (err) {
-        console.error(err);
-        res.status(500).json({message: 'Failed to create group'});
-    }
+ const createGroup = router.post('/',verifyToken  ,async(req, res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
+            await Group.create(req.body).then((result) => {
+                res.status(200)
+                res.json({
+                    result,
+                })
+            }
+            ).catch((err) => res.json({
+                error: err.message
+            }))
+
+        }
+    })
 });
+
+
 
 //  get group by id:
 router.get('/:groupId', async(req,res) => {
@@ -31,16 +45,83 @@ router.get('/:groupId', async(req,res) => {
 });
 
 //get all groups:
-router.get('/', async (req, res) => {
-    try{
-        const groups = await Group.find({});
-        res.json(groups); 
-    }catch(err){
-        console.error(err);
-        res.status(500).json({message: 'Failed to get all groups'});
-    }
-});
+const getAllGroups = router.get('/', verifyToken, async (req, res) => {
+    
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
 
+        } else {
+        await Group.find().sort().populate("members").then((result) => {
+                res.status(200);
+                res.json({
+                    groups: result,
+                })
+            }).catch((err) => res.json({
+                error: err.message
+            }))
+        }
+    })
+
+});
+const addMemberToGroup = router.put('/:groupId/members/:userId',verifyToken ,async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {  
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
+            const groupId = req.params.groupId;
+            const userId = req.params.userId;
+            const currentgroup = await Group.findById(groupId);
+            currentgroup.members.push(userId);
+            await Group.updateOne({_id: groupId}, currentgroup, (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        message: "Failed to add member to group 😢"
+                        })
+                        } else {
+                            res.status(200).json({
+                                message: "Member added to group successfully 🎉"
+            })}})
+        }
+    })
+}
+);
+
+const addExpenseToGroup = router.put('/:groupId/expenses/:expenseId',verifyToken ,async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {  
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
+            const groupId = req.params.groupId;
+            const expenseId = req.params.expenseId;
+            const currentGroup = await Group.findById(groupId);
+            currentGroup.expenses.push(expenseId);
+            await Group.updateOne({_id: groupId}, currentGroup, (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        message: "Failed to add expense to group 😢"
+                        })
+                        } else {
+                            res.status(200).json({
+                                message: "Expense added to group successfully 🎉"
+            })}})
+        }
+    })
+}
+);
+
+                              
+
+            
 //update group:
 router.put ('/:groupId', async (req,res)=>{
     try{
@@ -104,4 +185,34 @@ router.delete('/:groupId/members/:userId', async(req,res)=>{
     }
 });
 
-module.exports =router;
+function verifyToken(req, res, next) {
+    // Get auth header value
+    const bearerHeader = req.headers['authorization'];
+    // Check if bearer is undefined
+    if (typeof bearerHeader !== 'undefined') {
+        // Split at the space
+        const bearer = bearerHeader.split(' ');
+        // Get token from array
+        const bearerToken = bearer[1];
+
+        // Set the token
+
+        req.token = bearerToken;
+        // Next middleware
+        next();
+    } else {
+        // Forbidden
+        res.status(403)
+        next({
+            message: "Forbidden you have to login first bro"
+        })
+    }
+
+}
+
+module.exports ={
+  createGroup,
+    getAllGroups,
+    addMemberToGroup,
+    addExpenseToGroup
+};

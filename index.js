@@ -3,8 +3,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+
+
 const auth = require('./routes/auth.js');
 const expensesType = require('./routes/expensetype.js');
+const product = require('./routes/product.js');
+const group = require('./routes/group.js');
 const middlewares = require('./middlewares/errors');
 require('dotenv').config();
 
@@ -25,14 +29,24 @@ app.use(morgan('tiny'));
 // app.use('/expenses', require('./routes/expenses.js'));
 // app.use('/auth', require('./routes/auth.js'));
 //  app.use('/group', require('./routes/group.js'));
-app.use('/auth', auth.singup);//?done
-app.use('/auth', auth.signIn);//?done
-app.use('/auth', auth.UpdateUser);
-app.use('/expensetype', expensesType.createExpense);
-app.use('/expensetype', expensesType.getAllExpenseType);
+app.use('/auth', auth.singup); // todo done
+app.use('/auth', auth.signIn); // todo done
+app.use('/auth', auth.UpdateUser); 
 // app.use('/auth', auth.DeleteUser);
 // app.use('/auth', auth.getAllUsers);
 // app.use('/auth', auth.getUserById);
+app.use('/product', product.createProduct); // todo done
+app.use('/product', product.getAllProduct); // todo done
+app.use('/product', product.getOneProduct); // todo done
+app.use('/product', product.updateProduct); 
+app.use('/product', product.deleteProduct); 
+app.use('/group', group.createGroup);	
+app.use('/group', group.getAllGroups);
+app.use('/group', group.addMemberToGroup); //! needs testing
+app.use('/group', group.addExpenseToGroup); //! needs testing
+
+app.use('/expensetype', expensesType.createExpense);
+app.use('/expensetype', expensesType.getAllExpenseType);
 
 // app.use('/reimbursement', require('./routes/reimbursement.js'));
 // app.use('/expensetype', require('./routes/expensetype.js'));

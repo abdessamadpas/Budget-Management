@@ -49,14 +49,51 @@ const UpdateUser = router.put('/Update/:id', verifyToken, async (req, res, next)
 });
 
 
+// const signIn = router.post('/signin', async (req, res, next) => {
+//     try {
+//       console.log(req.body);
+//       const user = await User.findOne({ email: req.body.email });
+//       if (user) {
+//         const isMatch = await bcrypt.compare(req.body.password, user.passwordHash);
+//         if (isMatch) {
+//           jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
+//             if (err) {
+//               console.error(err);
+//               res.sendStatus(500);
+//             } else {
+//               res.json({
+//                 user,
+//                 token
+//               });
+//             }
+//           });
+//         } else {
+//             next({
+//                  message : "Password Invalid Bro 👀👀👀"
+//              });
+//         }
+//       } else {
+//         next({
+//             message: "Username Invalid try again 🐱‍👓 🐱‍🏍"
+//         });
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       next(error);
+//     }
+//   });
+ 
 const signIn = router.post('/signin', async (req, res, next) => {
     try {
       console.log(req.body);
       const user = await User.findOne({ email: req.body.email });
+  
       if (user) {
-        const isMatch = await bcrypt.compare(req.body.password, user.passwordHash);
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+  
         if (isMatch) {
-          jwt.sign({ user }, 'secretkey', { expiresIn: '1h' }, (err, token) => {
+          // Password matches, generate a token
+          jwt.sign({ user }, 'secretkey', { expiresIn: '9999999h' }, (err, token) => {
             if (err) {
               console.error(err);
               res.sendStatus(500);
@@ -68,22 +105,18 @@ const signIn = router.post('/signin', async (req, res, next) => {
             }
           });
         } else {
-            next({
-                 message : "Password Invalid Bro 👀👀👀"
-             });
+          // Password does not match
+          throw new Error('Invalid password');
         }
       } else {
-        next({
-            message: "Username Invalid try again 🐱‍👓 🐱‍🏍"
-        });
+        // User not found
+        throw new Error('Invalid username');
       }
     } catch (error) {
       console.error(error);
       next(error);
     }
-  });
-  
-  
+});
 
 // verify token
 const getAllUsers = router.get('/Users', verifyToken, (req, res, next) => {
