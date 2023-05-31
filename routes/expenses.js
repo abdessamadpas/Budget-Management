@@ -98,6 +98,67 @@ const  deleteExpense =router.delete('/expenses/:expenseId',verifyToken,async(req
         res.json({message:'Expense deleted successfully'});
 
 }})});
+
+const totalExpansesInGroup = router.get('/expenses/totalbygroup/:groupId',verifyToken, async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
+          const groupId = req.params.groupId;
+            const total = await Expense.aggregate([
+            {
+                $match: {
+                    group: groupId
+                }
+            },  {
+                $group: {
+                    _id: null,
+                    amount: {
+                        $sum: "$amount"
+                    }
+                }
+            }
+        ]);
+        res.json(total);
+    }
+          
+    })
+}
+);
+
+const totalExpansesByUser = router.get('/expenses/totalbyuser/:userId',verifyToken, async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
+            const userId = req.params.userId;
+            const total = await Expense.aggregate([
+            {
+                $match: {
+                    user: userId
+                }
+            },  {
+                $group: {
+                    _id: null,
+                    amount: {
+                        $sum: "$amount"
+
+                    }
+
+        }
+    }])
+    res.json(total);
+}})}
+);
+
+
+
   function verifyToken  (req, res, next){
     // Get auth header value
     const bearerHeader = req.headers['authorization'];
@@ -127,6 +188,7 @@ module.exports ={
     getOneExpense,
     getAllExpense,
     updateExpense,
-    deleteExpense
+    deleteExpense,
+    totalExpansesInGroup,
+    totalExpansesByUser
 };
-//

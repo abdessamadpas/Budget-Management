@@ -28,7 +28,6 @@ app.use(morgan('tiny'));
 app.use('/auth', auth.singup); // todo done
 app.use('/auth', auth.signIn); // todo done
 app.use('/auth', auth.UpdateUser); //! needs testing
-// app.use('/auth', auth.DeleteUser);//! needs testing
 // app.use('/auth', auth.getAllUsers);//! needs testing
 // app.use('/auth', auth.getUserById);//! needs testing
 
@@ -53,20 +52,22 @@ app.use('/group', group.getAllGroups);
 app.use('/group', group.addMemberToGroup); //! needs testing
 app.use('/group', group.addExpenseToGroup); //! needs testing
 
+
 // * expenses routes
 app.use('/expense', expense.createExpense);//! needs testing
 app.use('/expense', expense.getAllExpense);//! needs testing
 app.use('/expense', expense.getOneExpense);//! needs testing
 app.use('/expense', expense.updateExpense);//! needs testing
 app.use('/expense', expense.deleteExpense);//! needs testing
+app.use('/expense', expense.totalExpansesInGroup);//! needs testing
+app.use('/expense', expense.totalExpansesByUser);//! needs testing
+
 
 // * expensesType routes
 app.use('/expensetype', expensesType.createExpense);
 app.use('/expensetype', expensesType.getAllExpenseType);
 // app.use('/reimbursement', require('./routes/reimbursement.js')); //! needs testing
 // app.use('/expensetype', require('./routes/expensetype.js')); //! needs testing
-
-
 
 
 
