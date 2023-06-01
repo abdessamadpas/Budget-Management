@@ -50,17 +50,9 @@ const getArchExpenses = router.get('/arch', verifyToken,async(req,res)=>{
             })
 
         } else {
-    await Product.find({}
-    // .sort().populate(
-    //     {
-    //         path: 'expense',
-    //         // populate: {
-    //         //     path: 'Group',
-    //         // }
-    //     },
-    ).then(
-        (expenses) => {
-            res.status(200).json(expenses);
+    await Product.find({}).then(
+        (product) => {
+            res.status(200).json(product);
         }
     ).catch
         
@@ -186,5 +178,6 @@ module.exports = {
     getAllProduct,
     updateProduct,
     deleteProduct,
+    getArchExpenses
     
 }

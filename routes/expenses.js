@@ -21,9 +21,9 @@ const createExpense = router.post('/add',verifyToken, async(req,res)=>{
             const newexpense= new Expense(expense);
             await newexpense.save();
             res.status(201).json({message: 'Expense created succefully',newexpense});
- 
-}
-    })});
+        }
+    })
+});
 
 //get expenses by id:
 const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
@@ -53,12 +53,10 @@ const getAllExpense = router.get('/', verifyToken,async(req,res)=>{
                 message: "Authentication failed try to login "
             })
         }else{
-
         const expenses =await Expense.find({});
         res.json(expenses);
-
-  
 }})});
+
 // add product to expense
 const addProductToExpense = router.put('/:productId/:expenseId', verifyToken, async (req, res) => {
     try {
@@ -81,7 +79,7 @@ const addProductToExpense = router.put('/:productId/:expenseId', verifyToken, as
                 res.json(expense);
             }
         });
-    } catch (err) {
+    } catch(err){
         res.status(500).json({
             message: "Failed to add product to expense"
         });

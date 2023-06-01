@@ -22,8 +22,6 @@ app.use(cors());
 app.use(morgan('tiny'));
 
 
-
-
 // * routes auth
 app.use('/auth', auth.singup); // todo done
 app.use('/auth', auth.signIn); // todo done
@@ -39,6 +37,7 @@ app.use('/product', product.getAllProduct); // todo done
 app.use('/product', product.getOneProduct); // todo done
 app.use('/product', product.updateProduct); // todo done
 app.use('/product', product.deleteProduct); // todo done
+app.use('/product', product.getArchExpenses); // todo done
 
 
 // * group routes
@@ -61,14 +60,13 @@ app.use('/reimbursement', reimbursement.deletereimbursement); // todo done
 
 
 
-
 // * expenses routes
 app.use('/expense', expense.createExpense);// todo done
 app.use('/expense', expense.getAllExpense);// todo done
 app.use('/expense', expense.getOneExpense);// todo done
 app.use('/expense', expense.updateExpense);// todo done
 app.use('/expense', expense.deleteExpense);// todo done
-app.use('/expense', expense.addProductToExpense); //! need test
+app.use('/expense', expense.addProductToExpense); // todo done 
 
 
 // * expensesType routes
