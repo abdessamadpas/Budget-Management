@@ -59,7 +59,17 @@ const getAllGroups = router.get('/', verifyToken, async (req, res) => {
             })
 
         } else {
-        await Group.find().sort().populate("members").populate("expenses").then((result) => {
+        await Group.find().sort().populate([ "members",{
+
+            path: 'expenses',
+            populate: {
+                path: 'products',
+                populate: {
+                    path: 'category',
+                }
+            }
+
+        }]).then((result) => {
                 res.status(200);
                 res.json({
                     groups: result,
@@ -69,7 +79,6 @@ const getAllGroups = router.get('/', verifyToken, async (req, res) => {
             }))
         }
     })
-
 });
 
 

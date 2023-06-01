@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Expense = require ('../models/expenses');
+const Product = require('../models/product');
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -41,6 +43,7 @@ const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
     
 }})});
 
+
 //get all expenses:
 const getAllExpense = router.get('/', verifyToken,async(req,res)=>{
   jwt.verify(req.token, 'secretkey', async (err, authData) => {
@@ -56,6 +59,34 @@ const getAllExpense = router.get('/', verifyToken,async(req,res)=>{
 
   
 }})});
+// add product to expense
+const addProductToExpense = router.put('/:productId/:expenseId', verifyToken, async (req, res) => {
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                const product = await Product.findById(req.params.productId);
+                if (!product) {
+                    return res.status(404).json({ message: 'Product not found' });
+                }
+                const expense = await Expense.findById(req.params.expenseId);
+                if (!expense) {
+                    return res.status(404).json({ message: 'Expense not found' });
+                }
+                expense.products.push(product);
+                await expense.save();
+                res.json(expense);
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to add product to expense"
+        });
+    }
+});
 
 //update expense:
 const updateExpense = router.put('/:expensesId', verifyToken, async (req, res) => {
@@ -199,5 +230,6 @@ module.exports ={
     updateExpense,
     deleteExpense,
     totalExpansesInGroup,
-    totalExpansesByUser
+    totalExpansesByUser,
+    addProductToExpense
 };

@@ -68,6 +68,7 @@ app.use('/expense', expense.getAllExpense);// todo done
 app.use('/expense', expense.getOneExpense);// todo done
 app.use('/expense', expense.updateExpense);// todo done
 app.use('/expense', expense.deleteExpense);// todo done
+app.use('/expense', expense.addProductToExpense); //! need test
 
 
 // * expensesType routes

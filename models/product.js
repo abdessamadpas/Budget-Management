@@ -14,6 +14,10 @@ const ProductSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    expense: {
+        type: Schema.Types.ObjectId,
+        ref: 'Expense'
+    },
     image: {
         type: String,
     },

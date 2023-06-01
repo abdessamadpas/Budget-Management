@@ -39,6 +39,40 @@ const getOneProduct =router.get('/:productId', async(req,res) => {
         }
     }
 );
+// get arch of  expenses :
+const getArchExpenses = router.get('/arch', verifyToken,async(req,res)=>{
+      
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+
+        } else {
+    await Product.find({}
+    // .sort().populate(
+    //     {
+    //         path: 'expense',
+    //         // populate: {
+    //         //     path: 'Group',
+    //         // }
+    //     },
+    ).then(
+        (expenses) => {
+            res.status(200).json(expenses);
+        }
+    ).catch
+        
+        ((err) => {
+            res.status(500).json({
+                message: err.message
+            })
+        })
+    ;
+    }
+})});
+
 
 // get all products
 const getAllProduct =router.get('/',verifyToken, async (req, res) => {
@@ -121,6 +155,9 @@ const getAllProduct =router.get('/',verifyToken, async (req, res) => {
     
     }
 
+
+
+
 // delete product
 const deleteProduct = router.delete('/:Id', verifyToken, async (req, res) => {
     try {
@@ -148,5 +185,6 @@ module.exports = {
     getOneProduct,
     getAllProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    
 }
