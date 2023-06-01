@@ -58,46 +58,55 @@ const getAllExpense = router.get('/', verifyToken,async(req,res)=>{
 }})});
 
 //update expense:
-const updateExpense = router.put('/update/:expensesId',verifyToken, async (req,res)=>{
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
-        const UpdatedExpense=req.body;
-        const expense = new Expense(UpdatedExpense);
-        const updateExpense = await Expense.findByIdAndUpdate(
-            req.params.expensesId,
-            expense,
-            {new: true}
-        );
-        if(!UpdatedExpense){
-            return  rs.status(404).json({message:'expense not found'});
-        }
-        res.json(updatedExpense);
-   
-}})});
+const updateExpense = router.put('/:expensesId', verifyToken, async (req, res) => {
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                const updatedExpense = req.body;
+                const updateExpense = await Expense.findByIdAndUpdate( 
+                    req.params.expensesId,
+                    updatedExpense,
+                    { new: true }
+                );
+                if (!updateExpense) {
+                    return res.status(404).json({ message: 'expense not found' });
+                }
+                res.json(updateExpense);
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to update expense"
+        });
+    }
+});
 
 //delete expense:
-const  deleteExpense =router.delete('/delete/:expenseId',verifyToken,async(req,res)=>{
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
-        Expense.findByIdAndRemove({ _id: req.params.id }, (err,) => {
-            if (err) next(err)
-            res.status(200).json({
-                message: "🪓 Expense Deleted 🧨"
-            });
+const deleteExpense = router.delete('/:Id', verifyToken, async (req, res) => {
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                await Expense.findByIdAndRemove(req.params.Id);
+                res.status(200).json({
+                    message: "🪓 Expense Deleted 🧨"
+                });
+            }
         });
-        res.json({message:'Expense deleted successfully'});
-
-}})});
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to delete expense"
+        });
+    }
+});
+//verify token:
   function verifyToken  (req, res, next){
     // Get auth header value
     const bearerHeader = req.headers['authorization'];
