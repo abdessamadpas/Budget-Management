@@ -16,5 +16,7 @@ const ReimbursementSchema = new mongoose.Schema({
     },
 }, {timestamps: true}); 
 
-module.export=mongoose.model('Reimbursement',ReimbursementSchema);;
+module.exports=mongoose.model('Reimbursement',ReimbursementSchema);;
+// const Reimbursement = mongoose.model('Reimbursement', ReimbursementSchema);
 
+// module.exports = Reimbursement;

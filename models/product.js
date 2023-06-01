@@ -25,10 +25,6 @@ const ProductSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
-    group:{
-        type: Schema.Types.ObjectId,
-        ref: 'Group'
-    }
 
 }, {timestamps: true});
 

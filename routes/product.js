@@ -41,7 +41,7 @@ const getOneProduct =router.get('/:productId', async(req,res) => {
 );
 
 // get all products
-const getAllProduct =router.get('/',verifyToken, async (req, res,next) => {
+const getAllProduct =router.get('/',verifyToken, async (req, res) => {
     
     jwt.verify(req.token, 'secretkey', async (err) => {
         if (err) {
@@ -68,27 +68,34 @@ const getAllProduct =router.get('/',verifyToken, async (req, res,next) => {
 );
 
 //update product
-    const updateProduct = router.put('/update/:id', verifyToken, async (req, res, next) => {
-        jwt.verify(req.token, 'secretkey', async (err, authData) => {
-            if (err) {
-                res.status(403).json({
-                    message: "Authentication failed try to login "
-                })
-    
-            } else {
-                Product.updateOne({ _id: req.params.id }, req.body, { new: true }, (err, newProduct) => {
-                    if (err) next(err)
-                    res.status(200)
-                    res.json({
-                        message: "✔ update succeeded ✔"
-                    })
-                })
-            }
-    
-        })
-    })
+    const updateProduct = router.put('/:productId', verifyToken, async (req, res) => {
+        try {
+            jwt.verify(req.token, 'secretkey', async (err, authData) => {
+                if (err) {
+                    res.status(403).json({
+                        message: "Authentication failed, try to login"
+                    });
+                } else {
+                    const updatedproduct = req.body;
+                    const updateproduct = await Product.findByIdAndUpdate( 
+                        req.params.productId,
+                        updatedproduct,
+                        { new: true }
+                    );
+                    if (!updateproduct) {
+                        return res.status(404).json({ message: 'Product not found' });
+                    }
+                    res.json(updateproduct);
+                }
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: "Failed to update product"
+            });
+        }
+    });
 
-
+//verify token
     function verifyToken(req, res, next) {
         // Get auth header value
         const bearerHeader = req.headers['authorization'];
@@ -115,26 +122,26 @@ const getAllProduct =router.get('/',verifyToken, async (req, res,next) => {
     }
 
 // delete product
-const deleteProduct = router.delete('/delete/:id', verifyToken, async (req, res, next) => {
-jwt.verify(req.token, 'secretkey', async (err, authData) => {
-    if (err) {
-        res.status(403).json({
-            message: "Authentication failed try to login "
-        })
-
-    } else {
-        Product.deleteOne({ _id: req.params.id }, (err, newProduct) => {
-            if (err) next(err)
-            res.status(200)
-            res.json({
-                message: "✔ delete succeeded ✔"
-            })
-        })
+const deleteProduct = router.delete('/:Id', verifyToken, async (req, res) => {
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                await Product.findByIdAndRemove(req.params.Id);
+                res.status(200).json({
+                    message: "🪓 Product Deleted 🧨"
+                });
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to delete product"
+        });
     }
-
-}
-)
-})
+});
 
 module.exports = {
     createProduct,

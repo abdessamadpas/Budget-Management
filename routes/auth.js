@@ -12,14 +12,14 @@ const singup = router.post('/signup', async (req, res) => {
     // const salt = await bcrypt.genSalt(10);
     
     User.create({ ...req.body, password: hashedPassword })
-        .then((result) => {
+        .then((user) => {
             jwt.sign({ User }, 'secretkey', { expiresIn: '127d' }, (err, token) => {
                 if (err) {
                     res.sendStatus(403);
                 } else {
                     res.status(200)
                     res.json({
-                        result,
+                        user,
                         token
                     })
                 }
@@ -29,50 +29,41 @@ const singup = router.post('/signup', async (req, res) => {
         }))
 })
 
-
-const UpdateUser = router.put('/update/:id', verifyToken, async (req, res, next) => {
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403).json({
-                message: "Authentication failed try to login "
-            })
-        } else {
-            try {
-                            const updated = await User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
-                if (updated) {
-                     res.status(200)
-                res.json({
-                    message: "✔ update user  succeeded ✔, "
-                })
-                } else {
-                    res.status(400)
-                res.json({
-                    message: "❌ update user failed ❌, " })
+//update user:
+const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                const UpdatedUser = req.body;
+                const UpdateUser = await User.findByIdAndUpdate(
+                    req.params.Id,
+                    UpdatedUser,
+                    { new: true }
+                );
+                if (!UpdateUser) {
+                    return res.status(404).json({ message: 'User not found' });
                 }
-            } catch (error) {
-                next(error);
+                res.json(UpdateUser);
             }
-
-        }
-    })
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to update User"
+        });
+    }
 });
-
 
  
 const signIn = router.post('/signin', async (req, res, next) => {
     console.log(req.body);
     const user = await User.findOne({ name: req.body.name });
     console.log("user :", user);
-    console.log("user.password :", user.password);
-
-    console.log("req.body.password :", req.body.password);
-
     if (user) {
          const isMatch = await bcrypt.compare(req.body.password, user.password);
-       
-    
-
-     
             if(isMatch) {
                 jwt.sign({ user }, 'secretkey', { expiresIn: '1999d' }, (err, token) => {
                     if (err) {
@@ -97,20 +88,16 @@ const signIn = router.post('/signin', async (req, res, next) => {
     }
 });
 
-// verify token
-const getAllUsers = router.get('/Users', verifyToken, (req, res, next) => {
-
-
+// get all users
+const getAllUsers = router.get('/', verifyToken, (req, res, next) => {
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
-
             res.status(403)
             res.json({
                 message: "authrntication failed try to login "
             })
-
         } else {
-            await UserModel.find().sort()
+            await User.find({})
                 .then((data) => {
                     res.json({
                         data: data,
@@ -118,38 +105,49 @@ const getAllUsers = router.get('/Users', verifyToken, (req, res, next) => {
                     res.status(200);
 
                 })
-
         }
-
     })
 })
-//
-const getUser = router.get('/Users/:id', verifyToken, (req, res, next) => {
+//get user by id
+const getUserById = router.get('/:Userid', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
-
             res.status(403)
             res.json({
-                message: "authrntication failed try to login "
+                message: "Authentication failed try to login "
             })
+        }else{
 
-        } else {
-            const User = await UserModel.findOne({ _id: req.params.id });
-
-                if(User){
-                    res.status(200);
-                    res.json({
-                        User: User,
-                    })
-                }else{
-                    next({
-                        message : "User not found bro are you joking 🤷‍♂️"
-                    })
-                }
+        const user = await User.findById(req.params.Userid);
+        if(!user){
+            return res.status(404).json({message:'user not found'});
         }
+        res.json(user);
+    
+}})});
 
-    })
-})
+//delete user:
+const DeleteUser = router.delete('/:userId', verifyToken, async (req, res) => {
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                await User.findByIdAndRemove(req.params.userId);
+                res.status(200).json({
+                    message: "🪓 User Deleted 🧨"
+                });
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to delete user"
+        });
+    }
+});
+
 
 
 // FORMAT OF TOKEN
@@ -181,7 +179,7 @@ module.exports = {
     singup,
     signIn,
     getAllUsers,
-    getUser,
+    getUserById,
     UpdateUser,
-
+    DeleteUser
 }

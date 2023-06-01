@@ -27,57 +27,53 @@ app.use(morgan('tiny'));
 // * routes auth
 app.use('/auth', auth.singup); // todo done
 app.use('/auth', auth.signIn); // todo done
-app.use('/auth', auth.UpdateUser); //! needs testing long time to send request
-// app.use('/auth', auth.DeleteUser);//! needs testing
-// app.use('/auth', auth.getAllUsers);//! needs testing
-// app.use('/auth', auth.getUserById);//! needs testing
+app.use('/auth', auth.UpdateUser); // todo done
+ app.use('/auth', auth.DeleteUser);// todo done
+ app.use('/auth', auth.getAllUsers);// todo done
+ app.use('/auth', auth.getUserById);// todo done
 
 
 // * product routes
 app.use('/product', product.createProduct); // todo done
 app.use('/product', product.getAllProduct); // todo done
 app.use('/product', product.getOneProduct); // todo done
-app.use('/product', product.updateProduct); //! needs testing updateone???
-app.use('/product', product.deleteProduct); //! needs testing deleteone???
+app.use('/product', product.updateProduct); // todo done
+app.use('/product', product.deleteProduct); // todo done
 
 
 // * group routes
 app.use('/group', group.createGroup); // todo done
-//app.use('/group', group.getGroupById); //! needs testing
-app.use('/group', group.deleteGroup); //! needs testing not yet
-app.use('/group', group.updateGroup); //! needs testing not yet
+app.use('/group', group.getGroupById); // todo done
+app.use('/group', group.deleteGroup); // todo done
+app.use('/group', group.updateGroup); // todo done
 app.use('/group', group.getAllGroups); // todo done
-app.use('/group', group.addMemberToGroup); //! needs testing UpdateOne
+app.use('/group', group.addMemberToGroup); // todo done
 app.use('/group', group.deleteMemberGroup); // todo done
-app.use('/group', group.addExpenseToGroup); //! needs testing updateone()
-//app.use('/group', group.getGroupById); //! needs testing
+app.use('/group', group.addExpenseToGroup); // todo done
+
 
 // * reimbursement routes:
-app.use('/reimbursement', reimbursement.createreimbursement); //! needs testing
-app.use('/reimbursement', reimbursement.getAllreimbursement); //! needs testing
-//app.use('/reimbursement', reimbursement.getOnereimbursement); //! needs testing
-app.use('/reimbursement', reimbursement.updatereimbursement); //! needs testing 
-app.use('/reimbursement', reimbursement.deletereimbursement); //! needs testing
+app.use('/reimbursement', reimbursement.createreimbursement); // todo done
+app.use('/reimbursement', reimbursement.getAllreimbursement); // todo done
+app.use('/reimbursement', reimbursement.getOnereimbursement); // todo done
+app.use('/reimbursement', reimbursement.updatereimbursement); // todo done 
+app.use('/reimbursement', reimbursement.deletereimbursement); // todo done
 
 
 
 
 // * expenses routes
-app.use('/expense', expense.createExpense);//! needs testing
-app.use('/expense', expense.getAllExpense);//! needs testing
-app.use('/expense', expense.getOneExpense);//! needs testing
-app.use('/expense', expense.updateExpense);//! needs testing
-app.use('/expense', expense.deleteExpense);//! needs testing
-app.use('/expense', expense.totalExpansesInGroup);//! needs testing
-app.use('/expense', expense.totalExpansesByUser);//! needs testing
+app.use('/expense', expense.createExpense);// todo done
+app.use('/expense', expense.getAllExpense);// todo done
+app.use('/expense', expense.getOneExpense);// todo done
+app.use('/expense', expense.updateExpense);// todo done
+app.use('/expense', expense.deleteExpense);// todo done
 
 
 // * expensesType routes
 app.use('/expensetype', expensesType.createExpense);// todo done
 app.use('/expensetype', expensesType.getAllExpenseType);// todo done
-// app.use('/reimbursement', require('./routes/reimbursement.js')); //! needs testing
-// app.use('/expensetype', require('./routes/expensetype.js')); //! needs testing
-
+app.use('/expensetype', expensesType.getoneExpenseType);// todo done
 
 
 app.get('/hello' , (req , res) => {
