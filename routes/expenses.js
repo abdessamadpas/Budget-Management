@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 
 //create new expenses:
-const createExpense = router.post('/expenses',verifyToken, async(req,res)=>{
+const createExpense = router.post('/add',verifyToken, async(req,res)=>{
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -24,7 +24,7 @@ const createExpense = router.post('/expenses',verifyToken, async(req,res)=>{
     })});
 
 //get expenses by id:
-const getOneExpense = router.get('/expenses/:expensesId', verifyToken,async(req,res)=>{
+const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -42,7 +42,7 @@ const getOneExpense = router.get('/expenses/:expensesId', verifyToken,async(req,
 }})});
 
 //get all expenses:
-const getAllExpense = router.get('/expenses', verifyToken,async(req,res)=>{
+const getAllExpense = router.get('/', verifyToken,async(req,res)=>{
   jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -58,7 +58,7 @@ const getAllExpense = router.get('/expenses', verifyToken,async(req,res)=>{
 }})});
 
 //update expense:
-const updateExpense = router.put('/expenses/:expensesId',verifyToken, async (req,res)=>{
+const updateExpense = router.put('/update/:expensesId',verifyToken, async (req,res)=>{
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -68,7 +68,7 @@ const updateExpense = router.put('/expenses/:expensesId',verifyToken, async (req
         }else{
         const UpdatedExpense=req.body;
         const expense = new Expense(UpdatedExpense);
-        const updateExpense = await expense.findByIdAndUpdate(
+        const updateExpense = await Expense.findByIdAndUpdate(
             req.params.expensesId,
             expense,
             {new: true}
@@ -76,12 +76,12 @@ const updateExpense = router.put('/expenses/:expensesId',verifyToken, async (req
         if(!UpdatedExpense){
             return  rs.status(404).json({message:'expense not found'});
         }
-        res.json(UpdatedExpense);
+        res.json(updatedExpense);
    
 }})});
 
 //delete expense:
-const  deleteExpense =router.delete('/expenses/:expenseId',verifyToken,async(req,res)=>{
+const  deleteExpense =router.delete('/delete/:expenseId',verifyToken,async(req,res)=>{
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -115,7 +115,7 @@ const totalExpansesInGroup = router.get('/expenses/totalbygroup/:groupId',verify
                 }
             },  {
                 $group: {
-                    _id: null,
+                    _id: "$paiby",
                     amount: {
                         $sum: "$amount"
                     }

@@ -115,7 +115,7 @@ const getAllProduct =router.get('/',verifyToken, async (req, res,next) => {
     }
 
 // delete product
-const deleteProduct = router.delete('/Delete/:id', verifyToken, async (req, res, next) => {
+const deleteProduct = router.delete('/delete/:id', verifyToken, async (req, res, next) => {
 jwt.verify(req.token, 'secretkey', async (err, authData) => {
     if (err) {
         res.status(403).json({

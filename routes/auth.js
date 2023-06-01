@@ -55,12 +55,10 @@ const UpdateUser = router.put('/update/:id', verifyToken, async (req, res, next)
 
         }
     })
-})
+});
 
 
-
-
-
+ 
 const signIn = router.post('/signin', async (req, res, next) => {
     console.log(req.body);
     const user = await User.findOne({ name: req.body.name });
@@ -97,8 +95,7 @@ const signIn = router.post('/signin', async (req, res, next) => {
             message: "Username Invalid try again 🐱‍👓 🐱‍🏍"
         })
     }
-})
-
+});
 
 // verify token
 const getAllUsers = router.get('/Users', verifyToken, (req, res, next) => {
