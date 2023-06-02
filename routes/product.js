@@ -40,30 +40,31 @@ const getOneProduct =router.get('/:productId', async(req,res) => {
     }
 );
 // get arch of  expenses :
-const getArchExpenses = router.get('/arch', verifyToken,async(req,res)=>{
-      
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+const getArchProduct = router.get('/arch/products', verifyToken,async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err) => {
         if (err) {
             res.status(403)
             res.json({
                 message: "Authentication failed try to login "
             })
-
         } else {
-    await Product.find({}).then(
-        (product) => {
-            res.status(200).json(product);
+            await Product.find().sort().populate([{
+                path: 'expense',
+                populate: {
+                    path: 'Group',
+                }
+
+            }])
+                .then((data) => {
+                    res.status(200);
+                    res.json({
+                        products: data,
+                    })
+                })
         }
-    ).catch
-        
-        ((err) => {
-            res.status(500).json({
-                message: err.message
-            })
-        })
-    ;
-    }
-})});
+    })
+});
+    
 
 
 // get all products
@@ -178,6 +179,6 @@ module.exports = {
     getAllProduct,
     updateProduct,
     deleteProduct,
-    getArchExpenses
+    getArchProduct
     
 }

@@ -37,7 +37,7 @@ app.use('/product', product.getAllProduct); // todo done
 app.use('/product', product.getOneProduct); // todo done
 app.use('/product', product.updateProduct); // todo done
 app.use('/product', product.deleteProduct); // todo done
-app.use('/product', product.getArchExpenses); // todo done
+app.use('/product', product.getArchProduct); // todo done
 
 
 // * group routes
