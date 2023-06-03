@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const User = require('../models/user'); 
-const calculateReimbursements= router.get('/', async (req,res)=> {
+const calculateReimbursementsInProduct= router.get('/product', async (req,res)=> {
   try {
 
     const pipeline = [
@@ -16,7 +16,6 @@ const calculateReimbursements= router.get('/', async (req,res)=> {
           as: 'usersInfo',
         },
       },
-      
           { $unwind: '$usersInfo' },
           {
             $project: {
@@ -28,12 +27,10 @@ const calculateReimbursements= router.get('/', async (req,res)=> {
               expense: 1,
               category: 1,
               usersInfo: {
-                _id: 1,
                 name: 1,
               },
             },
           },
-
           // {
           //   $group: {
           //     _id: '$expense',
@@ -48,9 +45,8 @@ const calculateReimbursements= router.get('/', async (req,res)=> {
       //     totalUsers: { $first: '$usersInfo.count' },
       //   },
       // },
-      
       // { $match: { totalExpenses: { $gt: 0 } } },
-      
+
       {
         $project: {
           _id: 0,
@@ -72,4 +68,4 @@ const calculateReimbursements= router.get('/', async (req,res)=> {
 }
 );
 
-module.exports = {calculateReimbursements};
+module.exports = {calculateReimbursementsInProduct};

@@ -23,6 +23,8 @@ const ExpenseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
    }],
-}, {timestamps: true});
+}, {timestamps: true}
+
+);
 
 module.exports=mongoose.model('Expense', ExpenseSchema);
