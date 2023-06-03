@@ -69,6 +69,7 @@ app.use('/expense', expense.deleteExpense);// todo done
 app.use('/expense', expense.addProductToExpense); // todo done 
 
 
+
 // * expensesType routes
 app.use('/expensetype', expensesType.createExpense);// todo done
 app.use('/expensetype', expensesType.getAllExpenseType);// todo done
