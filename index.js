@@ -11,6 +11,7 @@ const product = require('./routes/product.js');
 const group = require('./routes/group.js');
 const expense = require('./routes/expenses.js');
 const reimbursement = require ('./routes/reimbursement');
+const service = require ('./services/index.js');
 const middlewares = require('./middlewares/errors');
 
 // * middleware
@@ -20,6 +21,10 @@ app.use(express.static('public'))
 app.use(helmet());
 app.use(cors());
 app.use(morgan('tiny'));
+
+// main route
+
+app.use('/service',service.calculateReimbursements  )
 
 
 // * routes auth

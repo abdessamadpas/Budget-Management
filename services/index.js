@@ -1,47 +1,70 @@
-const mongoose = require('mongoose');
-
+const express = require('express');
+const router = express.Router();
 const Product = require('../models/product');
-
-const calculateReimbursements= route.get('/', async (req,res)=> {
+const User = require('../models/user'); 
+const calculateReimbursements= router.get('/', async (req,res)=> {
   try {
 
     const pipeline = [
-      { $match: { users: { $gt: 1 } } },
-      
+      { $match: { $expr: { $gt: [ { $size: "$members" }, 1 ] } } }
+      ,
       {
         $lookup: {
-          from: users,
+          from: 'users',
           localField: 'members',
           foreignField: '_id',
           as: 'usersInfo',
         },
       },
       
-      { $unwind: '$usersInfo' },
-      
+          { $unwind: '$usersInfo' },
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+              price: 1,
+              usersNumber: { $size: '$members' },
+              description: 1,
+              expense: 1,
+              category: 1,
+              usersInfo: {
+                _id: 1,
+                name: 1,
+              },
+            },
+          },
+
+          // {
+          //   $group: {
+          //     _id: '$expense',
+              
+          //     totalUsers: { $size: "$members" },
+          //   },
+          // },
+
       // {
       //   $group: {
       //     _id: '$paidBy',
-      //     totalExpenses: { $sum: '$amount' },
       //     totalUsers: { $first: '$usersInfo.count' },
       //   },
       // },
       
       // { $match: { totalExpenses: { $gt: 0 } } },
       
-      // {
-      //   $project: {
-      //     _id: 0,
-      //     user: '$_id',
-      //     owedAmount: { $divide: ['$totalExpenses', '$totalUsers'] },
-      //   },
-      // },
+      {
+        $project: {
+          _id: 0,
+          user: '$usersInfo.name',
+          owedAmount: { $divide: ['$price', '$usersNumber'] },
+        },
+      },
     ];
 
 
     const result = await Product.aggregate(pipeline);
 
     console.log(result);
+    res.json(result);
 
   } catch (err) {
     console.error('An error occurred:', err);
