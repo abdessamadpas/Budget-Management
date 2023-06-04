@@ -98,7 +98,7 @@ app.use(middlewares.errorHandler);
 
 //* connection to mongoDB
 const dbUrl = process.env.MONGO_URI
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 1337
 mongoose.connect(dbUrl)
     .then(() => {
         app.listen(port);
