@@ -1,9 +1,11 @@
 {
     "version": 2,
-    "name": "music-album",
+    "name": "wewe",
+
     "builds": [
        { "src": "index.js", "use": "@vercel/node" }
     ],
+
     "routes": [
        { "src": "/(.*)", "dest": "index.js" }
     ]
