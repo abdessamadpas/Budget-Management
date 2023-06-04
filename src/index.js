@@ -5,17 +5,17 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config()
 
-const auth = require('./routes/auth.js');
-const expensesType = require('./routes/expensetype.js');
-const product = require('./routes/product.js');
-const group = require('./routes/group.js');
-const expense = require('./routes/expenses.js');
-const reimbursement = require ('./routes/reimbursement');
+const auth = require('../routes/auth.js');
+const expensesType = require('../routes/expensetype.js');
+const product = require('../routes/product.js');
+const group = require('../routes/group.js');
+const expense = require('../routes/expenses.js');
+const reimbursement = require ('../routes/reimbursement.js');
 
-const {calculateReimbursementsInExpense} = require('./services/owedAmountInExpense.js');
-const {calculateReimbursementsInProduct} = require('./services/owedAmountInProduct.js');
+const {calculateReimbursementsInExpense} = require('../services/owedAmountInExpense.js');
+const {calculateReimbursementsInProduct} = require('../services/owedAmountInProduct.js');
 
-const middlewares = require('./middlewares/errors');
+const middlewares = require('../middlewares/errors.js');
 
 
 // * middleware
@@ -98,7 +98,7 @@ app.use(middlewares.errorHandler);
 
 //* connection to mongoDB
 const dbUrl = process.env.MONGO_URI
-const port = process.env.PORT || 1337
+const port = process.env.PORT || 3000
 mongoose.connect(dbUrl)
     .then(() => {
         app.listen(port);
