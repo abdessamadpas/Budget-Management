@@ -35,4 +35,4 @@ jobs:
       - name: Run deployment
         run: |
           source .env
-          npx heroku-deploy@v3.12.12 --heroku_api_key $HEROKU_API_KEY --heroku_app_name "budgetmanagement" --heroku_email "abdessamad.aalouwan@etu.uae.ac.ma"
+          npx heroku-deploy --heroku_api_key $HEROKU_API_KEY --heroku_app_name "budgetmanagement" --heroku_email "abdessamad.aalouwan@etu.uae.ac.ma"
