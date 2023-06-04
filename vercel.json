@@ -1,8 +1,8 @@
 {
     "version": 2,
-    "name": "management budget",
+    "name": "management budget 1",
     "builds": [
-       { "src": "*.js", "use": "@vercel/node" }
+       { "src": "index.js", "use": "@vercel/node" }
     ],
     "routes": [
        { "src": "/(.*)", "dest": "/" }
