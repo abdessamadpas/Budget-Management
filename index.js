@@ -102,6 +102,7 @@ mongoose.connect(dbUrl)
     .then(() => {
         app.listen(process.env.PORT || 5000);
         console.log('\x1b[33m app connected to mongoDB! \x1b[0m');
+        console.log(`app listening on port ! ${process.env.PORT}`);
     })
     .catch((err => {
         console.error(err)

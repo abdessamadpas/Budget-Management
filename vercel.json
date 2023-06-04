@@ -1,10 +1,8 @@
 {
-    "version": 2,
-    "name": "management budget 1",
-    "builds": [
-       { "src": "index.js", "use": "@vercel/node" }
-    ],
-    "routes": [
-       { "src": "/(.*)", "dest": "/" }
-    ]
+   "rewrites": [
+     {
+       "source": "/(.*)",
+       "destination": "/"
+     }
+   ]
  }
