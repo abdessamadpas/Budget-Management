@@ -98,11 +98,12 @@ app.use(middlewares.errorHandler);
 
 //* connection to mongoDB
 const dbUrl = process.env.MONGO_URI
+const port = process.env.PORT || 5000
 mongoose.connect(dbUrl)
     .then(() => {
-        app.listen(process.env.PORT || 5000);
+        app.listen(port);
         console.log('\x1b[33m app connected to mongoDB! \x1b[0m');
-        console.log(`app listening on port ! ${process.env.PORT}`);
+        console.log(`app listening on port ! ${port}`);
     })
     .catch((err => {
         console.error(err)
