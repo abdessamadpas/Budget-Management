@@ -17,15 +17,15 @@ jobs:
       - name: Install dependencies
         run: npm install
   deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: akhileshns/heroku-deploy@v3.12.12
-          with:
-            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-            heroku_app_name: "budgetmanagement"
-            heroku_email: "abdessamad.aalouwan@etu.uae.ac.ma"  
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "budgetmanagement"
+          heroku_email: "abdessamad.aalouwan@etu.uae.ac.ma"  
 
   # deploy:
   #   runs-on: ubuntu-latest
