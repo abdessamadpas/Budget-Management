@@ -1,9 +1,10 @@
-const mongoose = require('./connection/index');
+const mongoose =  require ('mongoose');
+// Path: models\expenses.js
 
-//expenses schema:
 const ExpenseSchema = new mongoose.Schema({
    description : {
       type: String,
+      required: true,
    },
    amount: {
       type: Number,
@@ -11,12 +12,19 @@ const ExpenseSchema = new mongoose.Schema({
    },
    paiby:{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true,
    },
-   beneficiaries: {
+   Group: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'Group',
    },
-}, {timestamps: true});
+   products: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+   }],
+}, {timestamps: true}
+
+);
 
 module.exports=mongoose.model('Expense', ExpenseSchema);

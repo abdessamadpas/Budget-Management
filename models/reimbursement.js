@@ -1,23 +1,22 @@
-const { Schema } = require('mongoose');
-const mongoose = require('./connection/index');
+const mongoose = require('mongoose');
 
-//reimbursement schema:
+
 const ReimbursementSchema = new mongoose.Schema({
-    expenses:{
-        type : Schema.Types.ObjectId,
+    expenses : [{
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'Expense'
-    }, 
-    receipt: {
-        type : Schema.Types.ObjectId,
+    }], 
+    receipt: [{
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
-    },
+    }],
     amount: {
         type: Number,
         required: true,
     },
 }, {timestamps: true}); 
 
-const Reimbursement = mongoose.model('Reimbursement',ReimbursementSchema);
+module.exports=mongoose.model('Reimbursement',ReimbursementSchema);;
+// const Reimbursement = mongoose.model('Reimbursement', ReimbursementSchema);
 
-module.export=Reimbursement;
-
+// module.exports = Reimbursement;
