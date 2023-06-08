@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt');
 //! participation of user in expense
 
 const calculateReimbursementsInExpense  = router.get('/expense',verifyToken, async (req, res) => {
-   
     jwt.verify(req.token, 'secretkey', async (err) => {
         if (err) {
             res.status(403)
