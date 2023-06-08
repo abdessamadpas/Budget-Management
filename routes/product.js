@@ -4,6 +4,7 @@ const Product = require('../models/product');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const product = require('../models/product');
 
 // create product
 const createProduct = router.post('/add', async(req, res)=>{
@@ -28,19 +29,21 @@ const createProduct = router.post('/add', async(req, res)=>{
 });
 // get product by id
 const getOneProduct =router.get('/:productId', async(req,res) => {
-            
-        try{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
             const product = await Product.findById(req.params.productId);
             if(!product){
-                return rs.status(404).json({message:'product not found'});
+                return res.status(404).json({message:'product not found'});
             }
-            res.json(product);  
-        }catch(err){
-            console.error(err);
-            res.status(500).json({message: 'Fails to get product'});
-        }
-    }
-);
+        res.json(product);      
+    
+}})});
+
 // get arch of  expenses :
 const getArchProduct = router.get('/arch/products', verifyToken,async(req,res)=>{
     jwt.verify(req.token, 'secretkey', async (err) => {
@@ -180,4 +183,4 @@ module.exports = {
     deleteProduct,
     getArchProduct
     
-}
+};

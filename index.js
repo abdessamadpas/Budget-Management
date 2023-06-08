@@ -33,7 +33,7 @@ app.use('/service',calculateReimbursementsInExpense  )
 
 
 // * routes auth
-app.use('/auth', auth.singup); // todo done
+app.use('/auth', auth.signup); // todo done
 app.use('/auth', auth.signIn); // todo done
 app.use('/auth', auth.UpdateUser); // todo done
  app.use('/auth', auth.DeleteUser);// todo done

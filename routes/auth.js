@@ -5,29 +5,35 @@ const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
-const singup = router.post('/signup', async (req, res) => {
-
-    const hashedPassword = await bcrypt.hash( req.body.password, 10);
+const signup = router.post('/signup', async (req, res) => {
     const user = new User(req.body);
-    // const salt = await bcrypt.genSalt(10);
-    
-    User.create({ ...req.body, password: hashedPassword })
-        .then((user) => {
-            jwt.sign({ User }, 'secretkey', { expiresIn: '127d' }, (err, token) => {
-                if (err) {
-                    res.sendStatus(403);
-                } else {
-                    res.status(200)
-                    res.json({
-                        user,
-                        token
-                    })
-                }
-            });
-        }).catch((err) => res.json({
-            error: err.message
-        }))
-})
+    console.log(user);
+    if (!user.name || !user.password || !user.email) {
+        res.status(400).json({ error: "Please enter all fields" });
+        return;
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        User.create({ ...req.body, password: hashedPassword })
+            .then((user) => {
+                jwt.sign({ user }, 'secretkey', { expiresIn: '127d' }, (err, token) => {
+                    if (err) {
+                        res.sendStatus(403);
+                    } else {
+                        res.status(200).json({
+                            user,
+                            token
+                        });
+                    }
+                });
+            })
+            .catch((err) => res.json({ error: err.message }));
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred" });
+    }
+});
 
 //update user:
 const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
@@ -176,7 +182,7 @@ function verifyToken(req, res, next) {
 
 }
 module.exports = {
-    singup,
+    signup,
     signIn,
     getAllUsers,
     getUserById,

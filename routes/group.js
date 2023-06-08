@@ -44,12 +44,11 @@ const getGroupById = router.get('/:groupId', verifyToken,async(req,res)=>{
                 message: "Authentication failed try to login "
             })
         }else{
-
-        const group = await Group.findById(req.params.groupId);
-        if(!group){
-            return res.status(404).json({message:'expense not found'});
-        }
-        res.json(group);
+            const group = await Group.findById(req.params.groupId);
+            if(!group){
+                return res.status(404).json({message:'expense not found'});
+            }
+            res.json(group);
     
 }})});
 

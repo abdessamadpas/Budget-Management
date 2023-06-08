@@ -13,7 +13,12 @@ const createreimbursement = router.post('/add',verifyToken  ,async(req, res)=>{
                 message: "Authentication failed try to login "
             })
         }else{
-            await Reimbursement.create(req.body).then((result) => {
+            const reimb = req.body;
+            if (!reimb.provider || !reimb.amount) {
+               
+                return res.status(400).json({ message: 'Please enter all fields' });
+                };
+            await Reimbursement.create(reimb).then((result) => {
                 res.status(200)
                 res.json({
                     result,
@@ -22,9 +27,11 @@ const createreimbursement = router.post('/add',verifyToken  ,async(req, res)=>{
             ).catch((err) => res.json({
                 error: err.message
             }))
+
         }
     })
 });
+
 
 
 //get reimbursement by id:
@@ -39,7 +46,7 @@ const getOnereimbursement = router.get('/:reimbursementid', verifyToken,async(re
 
         const reimbursement = await Reimbursement.findById(req.params.reimbursementid);
         if(!reimbursement){
-            return rs.status(404).json({message:'expense not found'});
+            return rs.status(404).json({message:'Reimbursement not found'});
         }
         res.json(reimbursement);
     
