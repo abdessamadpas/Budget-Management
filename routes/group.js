@@ -14,6 +14,11 @@ const createGroup = router.post('/add',verifyToken  ,async(req, res)=>{
                 message: "Authentication failed try to login "
             })
         }else{
+            const group = req.body;
+            if (!group.name) {
+               
+                return res.status(400).json({ message: 'Please enter all fields' });
+                };
             await Group.create(req.body).then((result) => {
                 res.status(200)
                 res.json({

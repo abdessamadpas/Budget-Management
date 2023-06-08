@@ -13,6 +13,12 @@ const createExpense = router.post('/expensetype', async(req,res)=>{
                 message: "Authentication failed try to login "
             })
         }else{
+            const expensetype = req.body;
+          
+            if (!expensetype.name) {
+               
+                return res.status(400).json({ message: 'Please enter all fields' });
+                };
             await ExpenseType.create(req.body).then((result) => {
                 res.status(200)
                 res.json({

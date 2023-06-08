@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt');
 
 
 //create new expenses:
-const createExpense = router.post('/add',verifyToken, async(req,res)=>{
+const createExpense = router.post('/add',verifyToken, async(req,res,next)=>{
     try {
         jwt.verify(req.token, 'secretkey', async (err, authData) => {
             if (err) {
@@ -18,12 +18,27 @@ const createExpense = router.post('/add',verifyToken, async(req,res)=>{
                 });
             } else {
             const expense = req.body;
+           try {  if (!expense.description || !expense.amount || !expense.paidby) {
+               
+                return res.status(400).json({ message: 'Please enter all fields' });
+                };
+            
             const newexpense= new Expense(expense);
-            await newexpense.save();
+            console.log(newexpense);
+           
+                
+                await newexpense.save();
+            } catch (error) {
+                res.status(500).json({
+                    message: "Failed to create expense"
+                });
+            }
             res.status(201).json({message: 'Expense created succefully',newexpense});
         }
 
-    })
+        
+    }
+    )
 }catch(err){
     res.status(500).json({
         message: "Failed to create expense"
