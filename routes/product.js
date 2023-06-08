@@ -9,7 +9,9 @@ const bcrypt = require('bcrypt');
 const createProduct = router.post('/add', async(req, res)=>{
     try{
         const product= req.body;
-        
+        if (!product.name || !product.price ) {
+            res.status(400).json({ message: 'Please enter all fields' });
+        }
         await Product.create(product).then((result) => {
                 
                 res.status(200)
@@ -147,9 +149,6 @@ const getAllProduct =router.get('/',verifyToken, async (req, res) => {
         }
     
     }
-
-
-
 
 // delete product
 const deleteProduct = router.delete('/:Id', verifyToken, async (req, res) => {
