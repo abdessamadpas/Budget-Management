@@ -80,7 +80,7 @@ const calculateReimbursementsInExpense  = router.get('/expense',verifyToken, asy
                 PaidBy:1,
                 expense:1,
                 // ExpensePrice: 1,
-                }
+            }
         }
     ];
 

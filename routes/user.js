@@ -13,6 +13,9 @@ const User = require ('../models/user');
 router.post('/addUser', async(req, res)=>{
     try{
         const user= req.body;
+        if (!user.name || !user.email || !user.password){
+            return res.status(400).json({ message: 'Please enter all fields' });
+            };
         const newUser = new User(user);
         await newUser.save();
         res.status(201).json({message: 'user created  successfully'});

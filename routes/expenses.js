@@ -9,31 +9,52 @@ const bcrypt = require('bcrypt');
 
 
 //create new expenses:
-const createExpense = router.post('/add',verifyToken, async(req,res)=>{
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
+const createExpense = router.post('/add',verifyToken, async(req,res,next)=>{
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
             const expense = req.body;
+           try {  if (!expense.description || !expense.amount || !expense.paidby) {
+               
+                return res.status(400).json({ message: 'Please enter all fields' });
+                };
+            
             const newexpense= new Expense(expense);
-            await newexpense.save();
+            console.log(newexpense);
+           
+                
+                await newexpense.save();
+            } catch (error) {
+                res.status(500).json({
+                    message: "Failed to create expense"
+                });
+            }
             res.status(201).json({message: 'Expense created succefully',newexpense});
         }
-    })
-});
+
+        
+    }
+    )
+}catch(err){
+    res.status(500).json({
+        message: "Failed to create expense"
+    });
+
+}});
 
 //get expenses by id:
 const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
 
         const expense = await Expense.findById(req.params.expensesId);
         if(!expense){
@@ -41,21 +62,37 @@ const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
         }
         res.json(expense);
     
-}})});
+}})}
+    catch(err){
+        res.status(500).json({
+            message: "Failed to get expense"
+        });
+    }
+}   
+);
 
 
 //get all expenses:
 const getAllExpense = router.get('/', verifyToken,async(req,res)=>{
-  jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
         const expenses =await Expense.find({});
         res.json(expenses);
-}})});
+}})}
+    catch(err){
+        res.status(500).json({
+            message: "Failed to get expenses"
+        });
+    }
+}
+);
+
+
 
 // add product to expense
 const addProductToExpense = router.put('/:productId/:expenseId', verifyToken, async (req, res) => {
@@ -138,13 +175,13 @@ const deleteExpense = router.delete('/:Id', verifyToken, async (req, res) => {
 }});
 
 const totalExpansesInGroup = router.get('/expenses/totalbygroup/:groupId',verifyToken, async(req,res)=>{
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
           const groupId = req.params.groupId;
             const total = await Expense.aggregate([
             {
@@ -165,16 +202,22 @@ const totalExpansesInGroup = router.get('/expenses/totalbygroup/:groupId',verify
           
     })
 }
+catch(err){
+    res.status(500).json({
+        message: "Failed to get total expenses"
+    });
+}
+}
 );
 
 const totalExpansesByUser = router.get('/expenses/totalbyuser/:userId',verifyToken, async(req,res)=>{
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-            res.status(403)
-            res.json({
-                message: "Authentication failed try to login "
-            })
-        }else{
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
             const userId = req.params.userId;
             const total = await Expense.aggregate([
             {
@@ -193,6 +236,13 @@ const totalExpansesByUser = router.get('/expenses/totalbyuser/:userId',verifyTok
     }])
     res.json(total);
 }})}
+catch(err){
+    res.status(500).json({
+        message: "Failed to get total expenses"
+    });
+}
+}
+
 );
 
 
