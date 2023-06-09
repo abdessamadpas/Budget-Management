@@ -66,7 +66,7 @@ const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
  
 const signIn = router.post('/signin', async (req, res, next) => {
     console.log(req.body);
-    const user = await User.findOne({ name: req.body.name });
+    const user = await User.findOne({ email: req.body.email });
     console.log("user :", user);
     if (user) {
          const isMatch = await bcrypt.compare(req.body.password, user.password);

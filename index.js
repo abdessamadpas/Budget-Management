@@ -14,7 +14,7 @@ const reimbursement = require ('./routes/reimbursement.js');
 
 const {calculateReimbursementsInExpense} = require('./services/owedAmountInExpense.js');
 const {calculateReimbursementsInProduct} = require('./services/owedAmountInProduct.js');
-
+const {getBalanceUser} = require('./services/getBlanceUser.js');
 const middlewares = require('./middlewares/errors.js');
 
 
@@ -30,6 +30,7 @@ app.use(morgan('tiny'));
 
 app.use('/service',calculateReimbursementsInProduct  )
 app.use('/service',calculateReimbursementsInExpense  )
+app.use('/service',getBalanceUser)
 
 
 // * routes auth
