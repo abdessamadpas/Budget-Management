@@ -24,7 +24,8 @@ const getBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, r
         if (!user) {
             res.status(404).json({ message: 'User not found' });
         }
-        console.log(user._id);
+        const idUser = user[0]._id;
+        console.log(user);
         const pipeline = [
             {
             $lookup: { 
@@ -63,11 +64,7 @@ const getBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, r
 
                 },
             },
-            {
-                $match: {
-                  _id: user._id,
-                },
-              },
+          
             {   
                 $group: {
                     _id: '$user',
@@ -95,23 +92,17 @@ const getBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, r
                     // ExpensePrice: 1,
                 }
             },
-            // {
-            //     $match: {
-            //       _id: user._id,
-            //     },
-            //   },
-    
-            //   {
-            //     $project: {
-            //       _id: 1,
-            //       totalOwedAmount: 1,
-            //       usersNumber: 1,
-            //       description: 1,
-            //       prodPrice: 1,
-            //       PaidBy: 1,
-            //       expense: 1,
-            //     },
-             // },
+            {
+                $match: {
+                  _id: idUser,
+                },
+            },
+            {
+                $project: {
+                  _id: 1,
+                  balance: { $subtract: ['$totalOwedAmount', user[0].balance] }, 
+                },
+            },
            
         ];
 
