@@ -38,6 +38,7 @@ const signup = router.post('/signup', async (req, res) => {
 
 //update user:
 const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
+    
     try {
         jwt.verify(req.token, 'secretkey', async (err, authData) => {
             if (err) {
