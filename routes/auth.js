@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { re } = require('semver');
 
 const router = express.Router();
 
@@ -44,6 +45,11 @@ const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
                     message: "Authentication failed, try to login"
                 });
             } else {
+                if (!req.params.Id) {
+                    res.json({
+                        message: "Please enter all fields"
+                    });
+                }
                 const UpdatedUser = req.body;
                 const UpdateUser = await User.findByIdAndUpdate(
                     req.params.Id,
@@ -65,7 +71,11 @@ const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
 
  
 const signIn = router.post('/signin', async (req, res, next) => {
-    console.log(req.body);
+    if (req.body.email === "" || req.body.password === "") {
+        res.json({
+            message: "Please enter all fields"
+        });
+    }
     const user = await User.findOne({ email: req.body.email });
     console.log("user :", user);
     if (user) {
@@ -123,7 +133,11 @@ const getUserById = router.get('/:Userid', verifyToken, (req, res) => {
                 message: "Authentication failed try to login "
             })
         }else{
-
+        if (!req.params.Userid) {
+            res.json({
+                message: "Please enter all fields"
+            });
+        }
         const user = await User.findById(req.params.Userid);
         if(!user){
             return res.status(404).json({message:'user not found'});
@@ -141,6 +155,11 @@ const DeleteUser = router.delete('/:userId', verifyToken, async (req, res) => {
                     message: "Authentication failed, try to login"
                 });
             } else {
+                if (!req.params.userId) {
+                    res.json({
+                        message: "Please enter all fields"
+                    });
+                }
                 await User.findByIdAndRemove(req.params.userId);
                 res.status(200).json({
                     message: "🪓 User Deleted 🧨"
