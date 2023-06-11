@@ -46,7 +46,7 @@ const getOnereimbursement = router.get('/:reimbursementid', verifyToken,async(re
 
         const reimbursement = await Reimbursement.findById(req.params.reimbursementid);
         if(!reimbursement){
-            return rs.status(404).json({message:'Reimbursement not found'});
+            return res.status(404).json({message:'Reimbursement not found'});
         }
         res.json(reimbursement);
     

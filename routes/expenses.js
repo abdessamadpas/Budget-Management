@@ -9,42 +9,38 @@ const bcrypt = require('bcrypt');
 
 
 //create new expenses:
-const createExpense = router.post('/add',verifyToken, async(req,res,next)=>{
+const createExpense = router.post('/add', verifyToken, async (req, res, next) => {
     try {
-        jwt.verify(req.token, 'secretkey', async (err, authData) => {
-            if (err) {
-                res.status(403).json({
-                    message: "Authentication failed, try to login"
-                });
-            } else {
-            const expense = req.body;
-           try {  if (!expense.description || !expense.amount || !expense.paidby) {
-               
-                return res.status(400).json({ message: 'Please enter all fields' });
-                };
-            
-            const newexpense= new Expense(expense);
-            console.log(newexpense);
-           
-                
-                await newexpense.save();
-            } catch (error) {
-                res.status(500).json({
-                    message: "Failed to create expense"
-                });
+      jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+          res.status(403).json({
+            message: "Authentication failed, try to login"
+          });
+        } else {
+          const expense = req.body;
+          try {
+            if (!expense.description || !expense.amount || !expense.paidby) {
+              return res.status(400).json({ message: 'Please enter all fields' });
             }
-            res.status(201).json({message: 'Expense created succefully',newexpense});
+  
+            const newexpense = new Expense(expense);
+            console.log(newexpense);
+            await newexpense.save();
+            res.status(201).json({ message: 'Expense created successfully', newexpense });
+          } catch (error) {
+            res.status(500).json({
+              message: "Failed to create expense"
+            });
+          }
         }
-
-        
-    }
-    )
-}catch(err){
-    res.status(500).json({
+      });
+    } catch (err) {
+      res.status(500).json({
         message: "Failed to create expense"
-    });
-
-}});
+      });
+    }
+  });
+  
 
 //get expenses by id:
 const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
