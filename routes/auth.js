@@ -37,6 +37,7 @@ const signup = router.post('/signup', async (req, res) => {
 
 //update user:
 const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
+    
     try {
         jwt.verify(req.token, 'secretkey', async (err, authData) => {
             if (err) {
@@ -65,6 +66,12 @@ const UpdateUser = router.put('/:Id', verifyToken, async (req, res) => {
 
  
 const signIn = router.post('/signin', async (req, res, next) => {
+    const userr = new User(req.body);
+    console.log(userr);
+    if (!userr.password || !userr.email) {
+        res.status(400).json({ error: "Please enter all fields" });
+        return;
+    }
     console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
     console.log("user :", user);

@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const User = require('../models/user'); 
+
 const calculateReimbursementsInProduct= router.get('/product', async (req,res)=> {
   try {
-
     const pipeline = [
       { $match: { $expr: { $gt: [ { $size: "$members" }, 1 ] } } }
       ,
