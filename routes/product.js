@@ -10,7 +10,7 @@ const product = require('../models/product');
 const createProduct = router.post('/add', async(req, res)=>{
     try{
         const product= req.body;
-        if (!product.name || !product.price ) {
+        if (!req.params.name || !req.params.price ) {
             res.status(400).json({ message: 'Please enter all fields' });
         }
         await Product.create(product).then((result) => {
@@ -36,6 +36,11 @@ const getOneProduct =router.get('/:productId', async(req,res) => {
                 message: "Authentication failed try to login "
             })
         }else{
+            if (req.params.productId) {
+                res.json({
+                    message: "Please enter all fields"
+                });
+            }
             const product = await Product.findById(req.params.productId);
             if(!product){
                 return res.status(404).json({message:'product not found'});
@@ -108,6 +113,9 @@ const getAllProduct =router.get('/',verifyToken, async (req, res) => {
                         message: "Authentication failed, try to login"
                     });
                 } else {
+                    if (!req.params.productId) {
+                        return res.status(400).json({ message: 'Please enter all fields' });
+                    }
                     const updatedproduct = req.body;
                     const updateproduct = await Product.findByIdAndUpdate( 
                         req.params.productId,
