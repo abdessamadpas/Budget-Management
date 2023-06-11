@@ -5,6 +5,7 @@ const Product = require('../models/product');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { re } = require('semver');
 
 
 
@@ -18,15 +19,16 @@ const createExpense = router.post('/add',verifyToken, async(req,res,next)=>{
                 });
             } else {
             const expense = req.body;
-           try {  if (!expense.description || !expense.amount || !expense.paidby) {
+            console.log(req.body);
+             if (!req.body.description || !req.body.amount || !req.body.paiby) {
                
                 return res.status(400).json({ message: 'Please enter all fields' });
                 };
+          
             
             const newexpense= new Expense(expense);
-            console.log(newexpense);
            
-                
+                try {  
                 await newexpense.save();
             } catch (error) {
                 res.status(500).json({
