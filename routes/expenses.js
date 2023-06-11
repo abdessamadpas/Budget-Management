@@ -28,7 +28,8 @@ const createExpense = router.post('/add', verifyToken, async (req, res, next) =>
             
             const newexpense= new Expense(expense);
            
-                try {  
+                
+            try {  
                 await newexpense.save();
             } catch (error) {
                 res.status(500).json({
@@ -58,7 +59,7 @@ const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
 
         const expense = await Expense.findById(req.params.expensesId);
         if(!expense){
-            return rs.status(404).json({message:'expense not found'});
+            return res.status(404).json({message:'expense not found'});
         }
         res.json(expense);
     
