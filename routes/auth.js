@@ -106,7 +106,7 @@ const signIn = router.post('/signin', async (req, res, next) => {
 });
 
 // get all users
-const getAllUsers = router.get('/', verifyToken, (req, res, next) => {
+const getAllUsers = router.get('/getAllUsers', verifyToken, (req, res, next) => {
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
