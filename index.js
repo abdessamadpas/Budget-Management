@@ -37,9 +37,9 @@ app.use('/service',getBalanceUser)
 app.use('/auth', auth.signup); // todo done
 app.use('/auth', auth.signIn); // todo done
 app.use('/auth', auth.UpdateUser); // todo done
- app.use('/auth', auth.DeleteUser);// todo done
- app.use('/auth', auth.getAllUsers);// todo done
- app.use('/auth', auth.getUserById);// todo done
+app.use('/auth', auth.DeleteUser);// todo done
+app.use('/auth', auth.getAllUsers);// todo done
+app.use('/auth', auth.getUserById);// todo done
 
 
 // * product routes
@@ -85,6 +85,7 @@ app.use('/expense', expense.addProductToExpense); // todo done
 app.use('/expensetype', expensesType.createExpense);// todo done
 app.use('/expensetype', expensesType.getAllExpenseType);// todo done
 app.use('/expensetype', expensesType.getoneExpenseType);// todo done
+
 
 
 app.get('/hello' , (req , res) => {

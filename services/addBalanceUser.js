@@ -4,11 +4,10 @@ const Expense = require('../models/expenses.js');
 const User  = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { $add, $subtract } = require('mongodb');
+const { $add } = require('mongodb');
 
-//! participation of user in expense
 
-const getBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, res) => {
+const addBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, res) => {
     jwt.verify(req.token, 'secretkey', async (err) => {
         if (err) {
             res.status(403)
@@ -18,8 +17,6 @@ const getBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, r
 
         } else {
     try {
-        
-
         const user = await User.find({_id:req.params.userId})
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -97,10 +94,15 @@ const getBalanceUser  = router.get('/balance/:userId',verifyToken, async (req, r
                 },
             },
             {
-                
                 $project: {
                     _id: 1,
-                    balance: { $add: ['$totalOwedAmount', user[0].balance] }, 
+                    balance: {
+                      $cond:{
+                          if: {_id:"$PaidBy"},
+                          then: { $add: ['$totalOwedAmount', user[0].balance] },
+                          else: { $subtract: ['$totalOwedAmount', user[0].balance] },
+                      },
+                    }, 
                   },
             },
            
@@ -142,5 +144,5 @@ function verifyToken(req, res, next) {
 
 
 module.exports = {
-    getBalanceUser
+    addBalanceUser
 };

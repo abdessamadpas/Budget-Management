@@ -10,7 +10,7 @@ const { re } = require('semver');
 
 
 //create new expenses:
-const createExpense = router.post('/add',verifyToken, async(req,res,next)=>{
+const createExpense = router.post('/add', verifyToken, async (req, res, next) => {
     try {
         jwt.verify(req.token, 'secretkey', async (err, authData) => {
             if (err) {
@@ -37,16 +37,14 @@ const createExpense = router.post('/add',verifyToken, async(req,res,next)=>{
             }
             res.status(201).json({message: 'Expense created succefully',newexpense});
         }
-
-        
-    }
-    )
-}catch(err){
-    res.status(500).json({
+      });
+    } catch (err) {
+      res.status(500).json({
         message: "Failed to create expense"
-    });
-
-}});
+      });
+    }
+  });
+  
 
 //get expenses by id:
 const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{

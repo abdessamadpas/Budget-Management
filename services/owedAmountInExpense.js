@@ -51,7 +51,7 @@ const calculateReimbursementsInExpense  = router.get('/expense',verifyToken, asy
                 description: 1,
                 prodPrice: "$productsInfo.price",
                 user: '$usersInfo._id',
-                owedAmount: { $divide: ['$productsInfo.price', { $size: '$productsInfo.members' }] },
+                owedAmount: { $divide: ['$productsInfo.price', { $size: '$productsInfo.members' }] },//price diviser par les membres qui ont achete le produit
 
             },
         },
@@ -62,11 +62,11 @@ const calculateReimbursementsInExpense  = router.get('/expense',verifyToken, asy
                 usersNumber: { $first: '$usersNumber' },
                 description: { $first: '$description' },
                 prodPrice: { $first: '$prodPrice' },
-                    expense: { $first: '$expense' },
+                expense: { $first: '$expense' },
                 // _id:{ $first: '$_id' },
                 // ExpensePrice: "{$productsInfo.price}",
                 // totalUsers: { $sum: 1 },
-                    PaidBy: {$first : '$paiby' },
+                PaidBy: {$first : '$paiby' },
             
             },
         },  
