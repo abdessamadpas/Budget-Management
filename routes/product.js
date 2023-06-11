@@ -7,8 +7,14 @@ const bcrypt = require('bcrypt');
 const product = require('../models/product');
 
 // create product
-const createProduct = router.post('/add', async(req, res)=>{
-    try{
+const createProduct = router.post('/add',verifyToken, async(req, res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
         if (!req.body.name || !req.body.price ) {
             res.status(400).json({ message: 'Please enter all fields' });
         }  
@@ -23,10 +29,8 @@ const createProduct = router.post('/add', async(req, res)=>{
             }).catch((err) => res.json({
                 error: err.message
             }))
-    }catch (err) {
-        console.error(err);
-        res.status(500).json({message: 'Failed to create product'});
     }
+})
 });
 // get product by id
 const getOneProduct =router.get('/:productId', async(req,res) => {
