@@ -5,32 +5,38 @@ const Product = require('../models/product');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { re } = require('semver');
 
 
 
 //create new expenses:
 const createExpense = router.post('/add', verifyToken, async (req, res, next) => {
     try {
-      jwt.verify(req.token, 'secretkey', async (err, authData) => {
-        if (err) {
-          res.status(403).json({
-            message: "Authentication failed, try to login"
-          });
-        } else {
-          const expense = req.body;
-          try {
-            if (!expense.description || !expense.amount || !expense.paidby) {
-              return res.status(400).json({ message: 'Please enter all fields' });
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+            const expense = req.body;
+            console.log(req.body);
+             if (!req.body.description || !req.body.amount || !req.body.paiby) {
+               
+                return res.status(400).json({ message: 'Please enter all fields' });
+                };
+          
+            
+            const newexpense= new Expense(expense);
+           
+                
+            try {  
+                await newexpense.save();
+            } catch (error) {
+                res.status(500).json({
+                    message: "Failed to create expense"
+                });
             }
-            const newexpense = new Expense(expense);
-            console.log(newexpense);
-            await newexpense.save();
-            res.status(201).json({ message: 'Expense created successfully', newexpense });
-          } catch (error) {
-            res.status(500).json({
-              message: "Failed to create expense"
-            });
-          }
+            res.status(201).json({message: 'Expense created succefully',newexpense});
         }
       });
     } catch (err) {
@@ -53,7 +59,7 @@ const getOneExpense = router.get('/:expensesId', verifyToken,async(req,res)=>{
 
         const expense = await Expense.findById(req.params.expensesId);
         if(!expense){
-            return rs.status(404).json({message:'expense not found'});
+            return res.status(404).json({message:'expense not found'});
         }
         res.json(expense);
     
