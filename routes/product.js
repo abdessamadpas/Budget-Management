@@ -9,10 +9,11 @@ const product = require('../models/product');
 // create product
 const createProduct = router.post('/add', async(req, res)=>{
     try{
-        const product= req.body;
-        if (!req.params.name || !req.params.price ) {
+        if (!req.body.name || !req.body.price ) {
             res.status(400).json({ message: 'Please enter all fields' });
-        }
+        }  
+        const product= req.body;
+
         await Product.create(product).then((result) => {
                 
                 res.status(200)
