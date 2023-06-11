@@ -22,7 +22,6 @@ const createExpense = router.post('/add', verifyToken, async (req, res, next) =>
             if (!expense.description || !expense.amount || !expense.paidby) {
               return res.status(400).json({ message: 'Please enter all fields' });
             }
-  
             const newexpense = new Expense(expense);
             console.log(newexpense);
             await newexpense.save();
