@@ -86,7 +86,7 @@ app.use('/expense', expense.addProductToExpense); // todo done
 app.use('/expensetype', expensesType.createExpense);// todo done
 app.use('/expensetype', expensesType.getAllExpenseType);// todo done
 app.use('/expensetype', expensesType.getoneExpenseType);// todo done
-
+app.use('/expensetype', expensesType.deleteExpenseType);// todo done
 
 
 app.get('/hello' , (req , res) => {

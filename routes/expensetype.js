@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 //create a new expense type:
-const createExpense = router.post('/expensetype', async(req,res)=>{
+const createExpense = router.post('/expensetype', verifyToken, async(req,res)=>{
     jwt.verify(req.token, 'secretkey', async (err, authData) => {
         if (err) {
             res.status(403)
@@ -76,6 +76,22 @@ const getoneExpenseType = router.get('/:Id', verifyToken,async(req,res)=>{
         res.json(expenetype);
     
 }})});
+// delete expense type
+const deleteExpenseType = router.delete('/:Id', verifyToken,async(req,res)=>{
+    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+        if (err) {
+            res.status(403)
+            res.json({
+                message: "Authentication failed try to login "
+            })
+        }else{
+        const expenetype = await ExpenseType.findByIdAndDelete(req.params.Id);
+        if(!expenetype){
+            return rs.status(404).json({message:'expense not found'});
+        }
+        res.json(expenetype);
+
+}})});
 
 function verifyToken(req, res, next) {
     // Get auth header value
@@ -106,5 +122,6 @@ function verifyToken(req, res, next) {
 module.exports ={
     createExpense,
     getAllExpenseType,
-    getoneExpenseType
+    getoneExpenseType,
+    deleteExpenseType
 };
