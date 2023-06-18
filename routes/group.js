@@ -98,6 +98,11 @@ const addMemberToGroup = router.put('/:groupId/members/:userId', verifyToken, as
                 const groupId = req.params.groupId;
                 const userId = req.params.userId;
                 const currentgroup = await Group.findById(groupId);
+                if (currentgroup.members.includes(userId)) {
+                    res.status(400).json({
+                        message: "Member already exists in group"
+                    });
+                }
                 currentgroup.members.push(userId);
                 await Group.updateOne({ _id: groupId }, { $set: currentgroup });
                 res.status(200).json({

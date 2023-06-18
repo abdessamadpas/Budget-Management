@@ -30,11 +30,12 @@ const groupByUser  = router.get('/group/:userId',verifyToken, async (req, res) =
                     foreignField: '_id',
                     as: 'usersInfo',
                     },
-                },{
+                },
+                {
                     $unwind: '$usersInfo',
                 },
                 {
-                    $match: { $expr: { $eq: [ "$usersInfo._id", user[0]._id ] } }
+                    $match: { $expr: { $eq: [ "$usersInfo._id", user[0]._id ]}}
                 },
                 {
                     $project: {
@@ -44,6 +45,24 @@ const groupByUser  = router.get('/group/:userId',verifyToken, async (req, res) =
                        members: 1,
                     },
                 },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'members',
+                        foreignField: '_id',
+                        as: 'usersInfo',
+                        },
+                },
+                // {
+                //     $project: {
+                //         _id: 1,
+                //         name: 1,
+                //         balance: 1,
+                //        members: 1,
+                //     },
+                // },
+
+
                 
                 ]
             const groups = await Group.aggregate(pipeline);
