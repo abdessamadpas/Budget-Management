@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Expense = require ('../models/expenses');
 const Product = require('../models/product');
-
+const Group = require('../models/group');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { re } = require('semver');
@@ -174,6 +174,9 @@ const deleteExpense = router.delete('/:Id', verifyToken, async (req, res) => {
         res.json({message:'Expense deleted successfully'});
 
 }});
+
+
+
 
 const totalExpansesInGroup = router.get('/expenses/totalbygroup/:groupId',verifyToken, async(req,res)=>{
     try {

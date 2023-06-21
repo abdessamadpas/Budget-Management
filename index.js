@@ -81,6 +81,7 @@ app.use('/expense', expense.getOneExpense);// todo done
 app.use('/expense', expense.updateExpense);// todo done
 app.use('/expense', expense.deleteExpense);// todo done
 app.use('/expense', expense.addProductToExpense); // todo done 
+app.use('/expense', expense.totalExpansesInGroup);// todo done
 
 
 
