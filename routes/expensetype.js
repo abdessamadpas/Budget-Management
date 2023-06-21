@@ -10,7 +10,7 @@ const createExpense = router.post('/expensetype', verifyToken, async(req,res)=>{
         if (err) {
             res.status(403)
             res.json({
-                message: "Authentication failed try to login "
+                message: "Authentication failed try to login"
             })
         }else{
             const expensetype = req.body;

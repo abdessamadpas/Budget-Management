@@ -16,6 +16,7 @@ const {calculateReimbursementsInExpense} = require('./services/owedAmountInExpen
 const {calculateReimbursementsInProduct} = require('./services/owedAmountInProduct.js');
 const {getBalanceUser} = require('./services/getBlanceUser.js');
 const {groupByUser} = require('./services/groupsByUser.js');
+const {createExpenseWithProducts} = require('./services/createExpese.js');
 const middlewares = require('./middlewares/errors.js');
 
 
@@ -33,6 +34,7 @@ app.use('/service',calculateReimbursementsInProduct  )
 app.use('/service',calculateReimbursementsInExpense  )
 app.use('/service',getBalanceUser)
 app.use('/service', groupByUser)
+app.use('/service',createExpenseWithProducts);
 
 // * routes auth
 app.use('/auth', auth.signup); // todo done
