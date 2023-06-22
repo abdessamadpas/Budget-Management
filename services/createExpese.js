@@ -14,7 +14,7 @@ const createExpenseWithProducts = router.post('/createExpenseWithProducts', veri
           message: "Authentication failed, please try to log in."
         });
       } else {
-        const { description, amount, paiby, products } = req.body;
+        const { description, amount, paiby, products ,Group} = req.body;
 
         // Check if all required fields are present
         if (!description || !amount || !paiby || !products) {
@@ -26,6 +26,7 @@ const createExpenseWithProducts = router.post('/createExpenseWithProducts', veri
           description,
           amount,
           paiby,
+          Group,
           products: [] // To store product IDs associated with the expense
         });
 

@@ -4,6 +4,18 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config()
+const app = express();
+
+const http = require('http');
+const socketIO = require('socket.io');
+
+
+const server = http.createServer(app);
+const io = socketIO(server);
+app.set('socketio', io);
+
+
+
 
 const auth = require('./routes/auth.js');
 const expensesType = require('./routes/expensetype.js');
@@ -17,16 +29,22 @@ const {calculateReimbursementsInProduct} = require('./services/owedAmountInProdu
 const {getBalanceUser} = require('./services/getBlanceUser.js');
 const {groupByUser} = require('./services/groupsByUser.js');
 const {createExpenseWithProducts} = require('./services/createExpese.js');
+const {expenseSocket} = require('./services/socketExpense.js');
 const middlewares = require('./middlewares/errors.js');
 
 
+
+
 // * middleware
-const app = express();
+
 app.use(express.json());
 app.use(express.static('public'))
 app.use(helmet());
 app.use(cors());
 app.use(morgan('tiny'));
+
+// * connect to socket expense
+app.use('/sockets', expenseSocket);
 
 // main route
 
@@ -43,6 +61,7 @@ app.use('/auth', auth.UpdateUser); // todo done
 app.use('/auth', auth.DeleteUser);// todo done
 app.use('/auth', auth.getAllUsers);// todo done
 app.use('/auth', auth.getUserById);// todo done
+
 
 
 // * product routes
@@ -82,6 +101,7 @@ app.use('/expense', expense.updateExpense);// todo done
 app.use('/expense', expense.deleteExpense);// todo done
 app.use('/expense', expense.addProductToExpense); // todo done 
 app.use('/expense', expense.totalExpansesInGroup);// todo done
+app.use('/expense', expense.getExpansesByGroup);// todo done
 
 
 
@@ -98,6 +118,8 @@ app.get('/hello' , (req , res) => {
     });
 });
 
+
+
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
@@ -107,7 +129,7 @@ const dbUrl = process.env.MONGO_URI
 const port = process.env.PORT || 3000
 mongoose.connect(dbUrl)
     .then(() => {
-        app.listen(port);
+        server.listen(port);
         console.log('\x1b[33m app connected to mongoDB! \x1b[0m');
         console.log(`app listening on port ! ${port}`);
     })

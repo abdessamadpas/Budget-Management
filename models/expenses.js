@@ -18,6 +18,7 @@ const ExpenseSchema = new mongoose.Schema({
    Group: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group',
+      required: true,
    },
    products: [{
       type: mongoose.Schema.Types.ObjectId,

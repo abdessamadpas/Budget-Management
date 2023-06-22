@@ -175,6 +175,48 @@ const deleteExpense = router.delete('/:Id', verifyToken, async (req, res) => {
 
 }});
 
+const getExpansesByGroup = router.get('/expensesbyGroup/:groupId',verifyToken, async(req,res)=>{
+    try {
+        jwt.verify(req.token, 'secretkey', async (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    message: "Authentication failed, try to login"
+                });
+            } else {
+                
+                const group = await Group.find({_id:req.params.groupId});
+               const groupId = group[0]._id
+                if(!group){
+                    return res.status(404).json({message:'Group not found'});
+                }
+                console.log(groupId);
+                const pipeline = [
+                    {
+                        $lookup: { 
+                            from: 'products',
+                            localField: 'products',
+                            foreignField: '_id',
+                            as: 'productsInfo',
+                        },
+                    },
+                    {
+                        $match: {
+                            Group : groupId
+                        }
+                    },
+                ]
+                const expenses = await Expense.aggregate(pipeline);
+                    res.json(expenses);
+
+
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to get expenses"
+        });
+    }
+});
 
 
 
@@ -283,5 +325,6 @@ module.exports ={
     deleteExpense,
     totalExpansesInGroup,
     totalExpansesByUser,
-    addProductToExpense
+    addProductToExpense,
+    getExpansesByGroup
 };
