@@ -4,6 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config()
+const config = require('config');
+
 const app = express();
 
 const http = require('http');
@@ -127,12 +129,13 @@ app.use(middlewares.errorHandler);
 
 //* connection to mongoDB
 const dbUrl = process.env.MONGO_URI
-const port = process.env.PORT || 3000
+const port = process.env.PORT || config.get('dev.dbConfig.port')
+
 mongoose.connect(dbUrl)
     .then(() => {
         server.listen(port);
         console.log('\x1b[33m app connected to mongoDB! \x1b[0m');
-        console.log(`app listening on port ! ${port}`);
+        console.log(`app listening on port ! ${config.get("dev.dbConfig.port")}`);
     })
     .catch((err => {
         console.error(err)

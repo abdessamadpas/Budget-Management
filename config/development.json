@@ -1,0 +1,8 @@
+{
+  "name": "dev",
+    "dev": {
+      "dbConfig": {
+        "port": 1337
+      }
+    }
+  }
